@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#123B5D">
+<meta name="color-scheme" content="light">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta name="description" content="Student Academic Records Management System — a Programming for Mechanical Engineers course assignment by Ronald Owomugisha, Bachelor of Engineering in Automotive and Power Engineering, Department of Mechanical and Production Engineering, Kyambogo University.">
+<meta name="author" content="Ronald Owomugisha">
+<meta name="keywords" content="student records management system, Programming for Mechanical Engineers, Automotive and Power Engineering, Mechanical and Production Engineering, Kyambogo University, GPA, CGPA, transcript, academic records">
+<meta property="og:title" content="Student Records — Kyambogo University">
+<meta property="og:description" content="Academic Records Management System with semester GPA and CGPA computation. Programming for Mechanical Engineers course assignment, Bachelor of Engineering in Automotive and Power Engineering, Kyambogo University.">
+<meta property="og:type" content="website">
+<title>Student Records — Kyambogo University</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230B3C5D%27/%3E%3Cpath d=%27M10 25 32 14l22 11-22 11zM18 30v13c8 8 20 8 28 0V30%27 fill=%27none%27 stroke=%27%23B8943A%27 stroke-width=%274%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* University enterprise design tokens */
+  --primary:       #123B5D;
+  --primary-2:     #0A2D46;
+  --primary-soft:  #EAF0F4;
+  --secondary:     #F6F7F9;
+  --accent:        #B8943A;
+  --accent-dark:   #86681F;
+  --background:    #F1F4F6;
+  --card:          #FFFFFF;
+  --text:          #17212B;
+  --muted:         #465564;
+  --border:        #C9D3DD;
+  --success:       #3F6F52;
+  --warning:       #91601E;
+  --danger:        #A63D40;
+  --information:   #315F7D;
+  --purple:        #675A72;
+
+  /* Compatibility aliases */
+  --bg:        var(--background);
+  --bg2:       var(--secondary);
+  --bg3:       #E2E8F0;
+  --paper:     var(--card);
+  --paper2:    #F8FAFC;
+  --stone:     var(--border);
+  --forest:    var(--primary);
+  --forest2:   var(--primary-2);
+  --forest3:   #244F69;
+  --amber:     var(--accent);
+  --amber2:    #C9AA58;
+  --amber-bg:  rgba(212,175,55,.14);
+  --steel:     var(--information);
+  --steel2:    #46738F;
+  --steel-bg:  rgba(49,95,125,.10);
+  --rust:      var(--danger);
+  --rust2:     #8F3033;
+  --rust-bg:   rgba(198,40,40,.10);
+  --sage:      var(--success);
+  --sage-bg:   rgba(46,125,50,.10);
+  --teal:      #4F6E66;
+  --teal-bg:   rgba(15,118,110,.10);
+  --plum:      #667080;
+  --plum-bg:   rgba(124,58,237,.10);
+  --ink:       var(--text);
+  --ink2:      #273647;
+  --ink3:      var(--muted);
+  --ink4:      #5D6C7A;
+  --ink5:      #AAB6C2;
+  --white:     #FFFFFF;
+
+  --font-heading: 'Poppins', 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-number: 'Manrope', 'Inter', system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --radius:    14px;
+  --radius-sm: 10px;
+  --shadow:    0 4px 18px rgba(15,23,42,.06);
+  --shadow-md: 0 12px 32px rgba(15,23,42,.10);
+  --trans:     .24s cubic-bezier(.2,.8,.2,1);
+}
+html,body{height:100%;font-family:var(--font-body);background:var(--bg);color:var(--ink);overflow-x:hidden}
+button{cursor:pointer;font-family:var(--font-body)}
+input,select{font-family:var(--font-body)}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(28,59,46,.2);border-radius:3px}
+
+/* ══ LAYOUT ══ */
+.app{display:flex;min-height:100vh}
+
+/* ══ SIDEBAR ══ */
+.sidebar{
+  width:240px;min-width:240px;background:var(--forest);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;
+  border-right:1px solid rgba(255,255,255,.06);
+}
+.sb-top{padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sb-crest{width:42px;height:42px;border-radius:10px;background:var(--amber);
+  display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.sb-crest svg{width:22px;height:22px;color:var(--forest)}
+.sb-uni{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--amber);font-family:var(--font-number);margin-bottom:3px}
+.sb-sys{font-family:var(--font-heading);font-size:1.05rem;
+  color:var(--white);font-weight:600;line-height:1.2}
+.sb-yr{font-size:.65rem;color:rgba(255,255,255,.35);font-family:var(--font-number);
+  margin-top:8px;background:rgba(255,255,255,.05);border-radius:4px;padding:3px 8px;display:inline-block}
+
+.sb-stats{padding:14px 14px;border-bottom:1px solid rgba(255,255,255,.08);
+  display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sb-s{background:rgba(255,255,255,.05);border-radius:6px;padding:9px 8px;text-align:center}
+.sb-s .v{font-family:var(--font-number);font-size:1.1rem;font-weight:600;
+  color:var(--amber);display:block;line-height:1}
+.sb-s .l{font-size:.56rem;color:rgba(255,255,255,.35);text-transform:uppercase;
+  letter-spacing:.08em;margin-top:3px;display:block}
+
+.sb-nav{flex:1;padding:10px 8px}
+.sb-grp{font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);padding:10px 10px 5px;font-family:var(--font-number)}
+.sb-btn{
+  display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:6px;
+  border:none;background:transparent;color:rgba(253,250,245,.5);
+  font-size:.78rem;font-weight:400;width:100%;text-align:left;
+  transition:all var(--trans);margin-bottom:1px;
+}
+.sb-btn:hover{background:rgba(255,255,255,.06);color:var(--white)}
+.sb-btn.active{background:var(--amber-bg);color:var(--amber);font-weight:500;
+  border-left:2px solid var(--amber)}
+.sb-btn svg{width:15px;height:15px;flex-shrink:0;opacity:.6}
+.sb-btn.active svg,.sb-btn:hover svg{opacity:1}
+.sb-badge{margin-left:auto;background:rgba(193,127,58,.2);color:var(--amber);
+  font-family:var(--font-number);font-size:.58rem;padding:1px 7px;
+  border-radius:8px;min-width:20px;text-align:center}
+.sb-foot{padding:14px 18px;border-top:1px solid rgba(255,255,255,.06);
+  font-family:var(--font-number);font-size:.6rem;color:rgba(255,255,255,.25);line-height:1.7}
+
+/* ══ MAIN ══ */
+.main{margin-left:240px;flex:1;display:flex;flex-direction:column;min-width:0}
+
+/* ══ TOPBAR ══ */
+.topbar{
+  background:var(--paper);border-bottom:1.5px solid var(--stone);
+  padding:0 28px;height:56px;display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:90;flex-shrink:0;box-shadow:var(--shadow);
+}
+.tb-title{font-family:var(--font-heading);font-size:1.2rem;font-weight:600;color:var(--ink);white-space:nowrap}
+.tb-title em{font-style:italic;color:var(--ink3)}
+.tb-space{flex:1}
+.search-box{
+  display:flex;align-items:center;gap:7px;background:var(--bg2);
+  border:1.5px solid var(--stone);border-radius:var(--radius-sm);
+  padding:6px 12px;min-width:210px;transition:border-color var(--trans),box-shadow var(--trans);
+}
+.search-box:focus-within{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-bg)}
+.search-box input{background:transparent;border:none;outline:none;font-size:.8rem;color:var(--ink);flex:1;min-width:0}
+.search-box input::placeholder{color:var(--ink4)}
+.search-box svg{color:var(--ink4);width:13px;height:13px;flex-shrink:0}
+
+.tb-btns{display:flex;gap:6px}
+.tb-btn{
+  display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:var(--radius-sm);
+  border:1.5px solid var(--stone);background:transparent;color:var(--ink2);
+  font-size:.76rem;font-weight:500;transition:all var(--trans);white-space:nowrap;
+}
+.tb-btn:hover{border-color:var(--ink3);color:var(--ink)}
+.tb-btn.accent{background:var(--forest);border-color:var(--forest);color:var(--white);font-weight:600}
+.tb-btn.accent:hover{background:var(--forest2)}
+.tb-btn svg{width:13px;height:13px}
+
+/* ══ CONTENT ══ */
+.content{flex:1;padding:24px 28px 52px;background:var(--bg)}
+.panel{display:none}.panel.active{display:block}
+
+/* ══ PAGE HDR ══ */
+.ph{margin-bottom:20px}
+.ph-eye{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--amber);font-family:var(--font-number);margin-bottom:3px}
+.ph-h{font-family:var(--font-heading);font-size:1.7rem;font-weight:700;color:var(--ink)}
+.ph-sub{font-size:.78rem;color:var(--ink3);margin-top:3px}
+
+/* ══ CARDS ══ */
+.card{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--stone)}
+.card-hd{padding:13px 20px;border-bottom:1.5px solid var(--stone);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  background:var(--paper2)}
+.card-hd-title{font-family:var(--font-heading);font-size:1rem;font-weight:600;color:var(--ink)}
+.card-body{padding:18px 20px}
+
+/* ══ DASHBOARD ══ */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.kpi{
+  background:var(--paper);border-radius:var(--radius);padding:16px 18px;
+  box-shadow:var(--shadow);border:1px solid var(--stone);border-top:3px solid transparent;
+  transition:transform var(--trans),box-shadow var(--trans);
+}
+.kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.kpi-ico{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;
+  justify-content:center;margin-bottom:10px}
+.kpi-ico svg{width:16px;height:16px}
+.kpi-v{font-family:var(--font-number);font-size:1.55rem;font-weight:600;color:var(--ink);line-height:1}
+.kpi-l{font-size:.66rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+.kpi.amber{border-top-color:var(--amber)}.kpi.amber .kpi-ico{background:var(--amber-bg);color:var(--amber)}
+.kpi.forest{border-top-color:var(--forest)}.kpi.forest .kpi-ico{background:rgba(28,59,46,.1);color:var(--forest)}
+.kpi.steel{border-top-color:var(--steel)}.kpi.steel .kpi-ico{background:var(--steel-bg);color:var(--steel)}
+.kpi.rust{border-top-color:var(--rust)}.kpi.rust .kpi-ico{background:var(--rust-bg);color:var(--rust)}
+.kpi.teal{border-top-color:var(--teal)}.kpi.teal .kpi-ico{background:var(--teal-bg);color:var(--teal)}
+.kpi.plum{border-top-color:var(--plum)}.kpi.plum .kpi-ico{background:var(--plum-bg);color:var(--plum)}
+
+.dash-row{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-bottom:14px}
+.dash-row.eq{grid-template-columns:1fr 1fr}
+
+.cls-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bg2);font-size:.76rem}
+.cls-row:last-child{border-bottom:none}
+.cls-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.cls-lbl{width:140px;flex-shrink:0;color:var(--ink2);font-weight:500}
+.cls-trk{flex:1;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.cls-fil{height:100%;border-radius:3px;transition:width .6s ease}
+.cls-n{width:22px;text-align:right;font-family:var(--font-number);font-size:.72rem;color:var(--ink3)}
+.cls-p{width:32px;text-align:right;font-family:var(--font-number);font-size:.68rem;color:var(--ink4)}
+
+.hist{display:flex;align-items:flex-end;gap:3px;height:72px}
+.hcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.hbar{width:100%;border-radius:2px 2px 0 0;min-height:2px;transition:height .5s ease}
+.hlbl{font-size:.52rem;color:var(--ink4);font-family:var(--font-number)}
+
+.top-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bg2);font-size:.78rem}
+.top-row:last-child{border-bottom:none}
+.medal{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;flex-shrink:0}
+.m1{background:#F0C040;color:#5A3800}
+.m2{background:#C8C8C8;color:#383838}
+.m3{background:#C88040;color:#3A1800}
+.mn{background:var(--bg3);color:var(--ink4);font-family:var(--font-number);font-size:.58rem}
+
+/* ══ STUDENT TABLE ══ */
+.tbl-ctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding:10px 16px;border-bottom:1px solid var(--stone);background:var(--paper2)}
+.fsel{background:var(--bg2);border:1.5px solid var(--stone);border-radius:var(--radius-sm);
+  padding:5px 10px;font-size:.74rem;color:var(--ink);outline:none;cursor:pointer;
+  transition:border-color var(--trans)}
+.fsel:focus{border-color:var(--amber)}
+.tc-sp{flex:1}
+.pager-info{font-size:.72rem;color:var(--ink3)}
+table{width:100%;border-collapse:collapse;font-size:.79rem}
+thead th{background:var(--paper2);color:var(--ink3);font-size:.62rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;padding:9px 16px;text-align:left;
+  white-space:nowrap;border-bottom:1.5px solid var(--stone);cursor:pointer;user-select:none}
+thead th:hover{background:var(--bg2)}
+thead th.asc::after{content:" ↑";color:var(--amber)}
+thead th.desc::after{content:" ↓";color:var(--amber)}
+tbody tr{border-bottom:1px solid var(--bg2);transition:background var(--trans);animation:fadeUp .22s ease both}
+tbody tr:hover{background:var(--bg2)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+td{padding:11px 16px;color:var(--ink);white-space:nowrap}
+.td-mono{font-family:var(--font-number);font-size:.74rem;color:var(--ink2)}
+.td-b{font-weight:500}
+.gpa-cell{display:flex;align-items:center;gap:7px}
+.mini-bar{width:48px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;flex-shrink:0}
+.mini-fill{height:100%;border-radius:2px}
+.row-acts{display:flex;gap:4px;opacity:0;transition:opacity var(--trans)}
+tbody tr:hover .row-acts{opacity:1}
+.ra{width:26px;height:26px;border:none;border-radius:4px;background:transparent;
+  color:var(--ink4);display:flex;align-items:center;justify-content:center;transition:all var(--trans)}
+.ra:hover.view{background:var(--teal-bg);color:var(--teal)}
+.ra:hover.edit{background:var(--steel-bg);color:var(--steel)}
+.ra:hover.del{background:var(--rust-bg);color:var(--rust2)}
+.ra svg{width:13px;height:13px}
+
+.pg-row{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:10px 16px;border-top:1.5px solid var(--stone);flex-wrap:wrap}
+.pg-btns{display:flex;gap:3px}
+.pg-b{width:28px;height:28px;border:1.5px solid var(--stone);border-radius:4px;
+  background:var(--paper);color:var(--ink2);font-size:.74rem;display:flex;align-items:center;
+  justify-content:center;transition:all var(--trans)}
+.pg-b:hover{border-color:var(--amber);color:var(--amber)}
+.pg-b.on{background:var(--forest);border-color:var(--forest);color:var(--white);font-weight:700}
+.pg-b:disabled{opacity:.3;cursor:default;pointer-events:none}
+
+/* ══ CHIP ══ */
+.chip{display:inline-flex;align-items:center;padding:3px 9px;border-radius:10px;
+  font-size:.66rem;font-weight:500;white-space:nowrap}
+.c-fc  {background:#EAF0F4;color:#294F69;border:1px solid #C7D6E0}
+.c-scu {background:#EDF3EF;color:#365E47;border:1px solid #CBDCCF}
+.c-scl {background:#EEF1F3;color:#53606B;border:1px solid #D5DDE3}
+.c-pass{background:#F6F0E7;color:#795024;border:1px solid #E6D5BC}
+.c-fail{background:#F6ECEC;color:#8A3639;border:1px solid #E5C9CA}
+.c-gray{background:var(--bg2);color:var(--ink3);border:1px solid var(--stone)}
+
+/* ══ GRADE CHIP ══ */
+.gc{display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:22px;border-radius:4px;font-family:var(--font-number);font-size:.68rem;font-weight:600}
+.gA  {background:#E8F5E9;color:#1B5E20;border:1px solid #A5D6A7}
+.gBp {background:#E3F2FD;color:#0D47A1;border:1px solid #90CAF9}
+.gB  {background:#EDE7F6;color:#4527A0;border:1px solid #CE93D8}
+.gCp {background:#E8F5E9;color:#33691E;border:1px solid #AED581}
+.gC  {background:#FFF8E1;color:#E65100;border:1px solid #FFD54F}
+.gDp {background:#FFF3E0;color:#BF360C;border:1px solid #FFAB91}
+.gD  {background:#FBE9E7;color:#8D2D2D;border:1px solid #FFAB91}
+.gF  {background:#FFEBEE;color:#B71C1C;border:1px solid #EF9A9A}
+
+/* ══ FORMS ══ */
+.fc{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--stone)}
+.fc-hd{padding:16px 22px;border-bottom:1.5px solid var(--stone);background:var(--paper2)}
+.fc-hd h2{font-family:var(--font-heading);font-size:1.08rem;color:var(--ink)}
+.fc-hd p{font-size:.74rem;color:var(--ink3);margin-top:3px}
+.fc-body{padding:20px 22px}
+.fc-foot{padding:12px 22px 18px;display:flex;gap:8px;flex-wrap:wrap}
+.frow{display:grid;gap:14px;margin-bottom:14px}
+.frow.c2{grid-template-columns:1fr 1fr}
+.frow.c3{grid-template-columns:1fr 1fr 1fr}
+.frow.c4{grid-template-columns:1fr 1fr 1fr 1fr}
+.frow.c1{grid-template-columns:1fr}
+.field{}
+label.lbl{display:block;font-size:.64rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.09em;color:var(--ink2);margin-bottom:5px}
+.req::after{content:" *";color:var(--rust2)}
+input[type=text],input[type=number],input[type=email],select.inp{
+  width:100%;background:var(--bg2);border:1.5px solid var(--stone);border-radius:var(--radius-sm);
+  padding:8px 12px;font-size:.82rem;color:var(--ink);outline:none;
+  transition:border-color var(--trans),box-shadow var(--trans);
+}
+input:focus,select.inp:focus{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-bg)}
+input::placeholder{color:var(--ink4)}
+.fhint{font-size:.65rem;color:var(--ink4);margin-top:3px}
+.ferr{font-size:.65rem;color:var(--rust2);margin-top:3px;display:none}
+.ferr.show{display:block}
+
+.gpa-wrap{position:relative}
+.gpa-trk{height:4px;background:var(--bg3);border-radius:2px;margin-top:6px;overflow:hidden}
+.gpa-fil{height:100%;border-radius:2px;transition:width .28s,background .28s;width:0}
+.gpa-hints{display:flex;justify-content:space-between;margin-top:3px}
+.gpa-hints span{font-size:.58rem;color:var(--ink4);font-family:var(--font-number)}
+.gpa-prev{font-size:.7rem;font-weight:600;margin-top:4px;min-height:1em;font-family:var(--font-number)}
+
+/* ══ ENTRY BLOCK ══ */
+.eblock{border:1.5px solid var(--stone);border-radius:var(--radius-sm);padding:14px 16px;
+  margin-bottom:10px;background:var(--bg2);animation:fadeUp .2s ease}
+.elbl{font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--amber);margin-bottom:10px;font-family:var(--font-number)}
+
+/* ══ BUTTONS ══ */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 17px;border-radius:var(--radius-sm);
+  font-size:.78rem;font-weight:500;border:none;transition:all var(--trans);white-space:nowrap}
+.btn svg{width:13px;height:13px}
+.btn-forest{background:var(--forest);color:var(--white);font-weight:600}
+.btn-forest:hover{background:var(--forest2);transform:translateY(-1px)}
+.btn-amber{background:var(--amber);color:var(--white);font-weight:600}
+.btn-amber:hover{background:var(--amber2)}
+.btn-ghost{background:transparent;color:var(--ink2);border:1.5px solid var(--stone)}
+.btn-ghost:hover{border-color:var(--ink3);color:var(--ink)}
+.btn-rust{background:var(--rust-bg);color:var(--rust2);border:1.5px solid rgba(139,58,58,.2)}
+.btn-rust:hover{background:rgba(139,58,58,.2)}
+.btn-steel{background:var(--steel-bg);color:var(--steel);border:1.5px solid rgba(58,111,165,.2)}
+.btn-steel:hover{background:rgba(58,111,165,.2)}
+.btn-sm{padding:5px 11px;font-size:.72rem}
+.btn-xs{padding:3px 8px;font-size:.68rem}
+
+/* ══ TRANSCRIPT VIEW ══════════════════════════════════════════ */
+.transcript-wrap{max-width:900px;margin:0 auto}
+
+/* Sticky CGPA banner */
+.cgpa-banner{
+  position:sticky;top:56px;z-index:80;
+  background:var(--forest);color:var(--white);
+  padding:10px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  border-bottom:2px solid var(--amber);margin-bottom:0;
+}
+.cgpa-val{font-family:var(--font-number);font-size:1.6rem;font-weight:600;color:var(--amber);line-height:1}
+.cgpa-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.12em;
+  color:rgba(255,255,255,.5);font-family:var(--font-number);margin-bottom:2px}
+.cgpa-cls{font-size:.82rem;font-weight:500;color:rgba(255,255,255,.85)}
+.cgpa-divider{width:1px;height:36px;background:rgba(255,255,255,.15)}
+.cgpa-stat{text-align:center}
+.cgpa-stat .sv{font-family:var(--font-number);font-size:.95rem;font-weight:600;color:var(--amber2);display:block}
+.cgpa-stat .sl{font-size:.58rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;display:block;margin-top:2px}
+.cgpa-actions{margin-left:auto;display:flex;gap:6px}
+
+/* Semester timeline */
+.semester-list{padding:20px 0}
+.semester{display:flex;gap:0;margin-bottom:0}
+
+/* Left spine */
+.sem-spine{width:72px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;position:relative}
+.sem-node{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--paper);border:2px solid var(--stone);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-number);font-size:.6rem;font-weight:600;
+  color:var(--ink3);position:relative;z-index:2;flex-shrink:0;margin-top:2px;
+  transition:all var(--trans);cursor:default;
+}
+.sem-node.has-data{border-color:var(--amber);color:var(--amber);background:var(--amber-bg)}
+.sem-node.current{border-color:var(--forest);border-width:3px;color:var(--forest);background:rgba(28,59,46,.08)}
+.sem-line{width:2px;flex:1;background:var(--stone);min-height:20px}
+.sem-line.done{background:var(--amber)}
+
+/* Right card */
+.sem-card{
+  flex:1;margin-left:0;margin-bottom:20px;
+  background:var(--paper);border-radius:var(--radius);
+  border:1px solid var(--stone);box-shadow:var(--shadow);overflow:hidden;
+}
+.sem-card-hd{
+  padding:12px 18px;background:var(--paper2);border-bottom:1.5px solid var(--stone);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+.sem-title{font-family:var(--font-heading);font-size:1rem;font-weight:600;color:var(--ink)}
+.sem-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sem-gpa-badge{
+  font-family:var(--font-number);font-size:.78rem;font-weight:600;
+  padding:3px 10px;border-radius:6px;
+}
+.sem-units{font-size:.68rem;color:var(--ink4);font-family:var(--font-number)}
+.sem-empty{padding:20px 18px;color:var(--ink4);font-size:.8rem;font-style:italic;
+  display:flex;align-items:center;gap:8px}
+
+/* course unit table inside sem card */
+.cu-table{width:100%;border-collapse:collapse;font-size:.77rem}
+.cu-table thead th{background:var(--bg2);color:var(--ink3);font-size:.6rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.09em;padding:7px 16px;text-align:left;
+  border-bottom:1px solid var(--stone)}
+.cu-table tbody tr{border-bottom:1px solid var(--bg2)}
+.cu-table tbody tr:hover{background:var(--bg2)}
+.cu-table td{padding:9px 16px}
+.cu-table tbody tr:last-child{border-bottom:none}
+.mark-val{font-family:var(--font-number);font-weight:500}
+.gp-val{font-family:var(--font-number);font-weight:600}
+
+/* arc gauge */
+.arc-wrap{display:flex;flex-direction:column;align-items:center}
+.arc-svg{display:block}
+
+/* add course form */
+.add-course-form{padding:14px 18px;border-top:1.5px solid var(--stone);background:var(--bg2)}
+.add-course-form .frow{margin-bottom:8px}
+
+/* ══ MODAL ══ */
+.overlay{position:fixed;inset:0;background:rgba(15,30,22,.7);backdrop-filter:blur(4px);
+  z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
+.overlay.open{display:flex}
+.modal{background:var(--paper);border-radius:12px;box-shadow:var(--shadow-md);
+  width:100%;animation:pop .2s ease;border:1px solid var(--stone)}
+.modal-sm{max-width:420px}.modal-md{max-width:580px}.modal-lg{max-width:820px}
+@keyframes pop{from{opacity:0;transform:scale(.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.m-hd{padding:16px 22px;border-bottom:1.5px solid var(--stone);
+  display:flex;align-items:center;justify-content:space-between;background:var(--paper2)}
+.m-hd h3{font-family:var(--font-heading);font-size:1.05rem;color:var(--ink)}
+.m-hd p{font-size:.73rem;color:var(--ink3);margin-top:2px}
+.m-close{width:26px;height:26px;border:none;background:var(--bg2);border-radius:5px;
+  color:var(--ink3);display:flex;align-items:center;justify-content:center;transition:all var(--trans)}
+.m-close:hover{background:var(--bg3);color:var(--ink)}
+.m-body{padding:18px 22px}
+.m-foot{padding:0 22px 16px;display:flex;gap:8px;justify-content:flex-end}
+
+/* ══ TOAST ══ */
+.t-stack{position:fixed;top:16px;right:20px;z-index:1000;display:flex;flex-direction:column;gap:7px}
+.toast{background:var(--forest);color:var(--white);padding:10px 15px;border-radius:7px;
+  font-size:.78rem;box-shadow:var(--shadow-md);display:flex;align-items:center;gap:9px;
+  animation:tIn .2s ease;max-width:300px;border-left:3px solid var(--amber)}
+.toast.ok{border-left-color:var(--sage)}.toast.err{border-left-color:var(--rust2)}.toast.info{border-left-color:var(--steel)}
+@keyframes tIn{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
+
+/* ══ PRINT ══ */
+@media print{
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html,body{height:auto!important;overflow:visible!important}
+  .sidebar,.topbar,.tb-btns,.search-box,.tbl-ctrl,.pg-row,
+  .row-acts,.ra,.m-close,.t-stack,.overlay,.cgpa-actions,
+  .add-course-form,.sb-btn,.sb-grp,.sb-foot,.sb-stats,
+  .btn-rust,.btn-amber,.btn-xs,.btn-sm{display:none!important}
+  .panel:not(.active){display:none!important}
+  .main{margin-left:0!important}
+  .content{background:#fff!important;padding:8px!important}
+  .card,.sem-card{box-shadow:none!important;border:1px solid #ccc!important}
+  .cgpa-banner{
+    position:relative!important;top:0!important;
+    background:var(--forest)!important;
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+  .semester-list{padding:8px 0!important}
+  body{background:#fff!important}
+  .ph{display:none}
+  @page{margin:1.5cm;size:A4}
+}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:860px){
+  .sidebar{transform:translateX(-100%)}
+  .main{margin-left:0}
+  .dash-row,.dash-row.eq{grid-template-columns:1fr}
+  .frow.c2,.frow.c3,.frow.c4{grid-template-columns:1fr}
+}
+
+/* ══ ENTERPRISE UNIVERSITY THEME ══ */
+body{font-family:var(--font-body);background:var(--background);color:var(--text);line-height:1.5}
+button,input,select{font-family:var(--font-body)}
+button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{
+  outline:3px solid rgba(49,95,125,.30);outline-offset:2px
+}
+.skip-link{position:fixed;left:16px;top:-60px;z-index:2000;background:var(--card);color:var(--primary);
+  padding:10px 14px;border-radius:8px;box-shadow:var(--shadow-md);font-weight:700;text-decoration:none}
+.skip-link:focus{top:16px}
+.sidebar{background:linear-gradient(180deg,#123B5D 0%,#0A2D46 100%);border-right:0;box-shadow:8px 0 28px rgba(10,45,70,.12)}
+.sb-top{position:relative;padding:26px 20px 20px}
+.sb-crest{background:rgba(212,175,55,.16);border:1px solid rgba(212,175,55,.48);box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+.sb-crest svg{color:#E6CB78}.sb-uni{color:#E3C86E;font-family:var(--font-heading);font-weight:600}
+.sb-sys{font-family:var(--font-heading);font-size:1.02rem;letter-spacing:-.01em}
+.sb-yr{font-family:var(--font-number);color:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.08)}
+.sb-s{background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.06);border-radius:10px}
+.sb-s .v{font-family:var(--font-number);color:#E7CE7D}.sb-s .l{color:rgba(255,255,255,.72)}
+.sb-grp{font-family:var(--font-body);font-weight:700;color:rgba(255,255,255,.42)}
+.sb-btn{border-radius:10px;color:rgba(255,255,255,.70);font-weight:500;padding:10px 12px;border-left:3px solid transparent}
+.sb-btn:hover{background:rgba(255,255,255,.08);color:#fff;transform:translateX(2px)}
+.sb-btn.active{background:rgba(154,184,203,.18);color:#fff;border-left-color:#D1B15A;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.sb-badge{background:rgba(255,255,255,.12);color:#fff;font-family:var(--font-number)}
+.sidebar-close{display:none;position:absolute;right:12px;top:12px;width:34px;height:34px;border:0;border-radius:9px;
+  background:rgba(255,255,255,.08);color:#fff;font-size:1.4rem;line-height:1}
+.sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(15,23,42,.52);backdrop-filter:blur(2px);z-index:95}
+.mobile-menu-btn{display:none;width:38px;height:38px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--primary);align-items:center;justify-content:center}
+.mobile-menu-btn svg{width:19px;height:19px}
+.topbar{height:64px;background:rgba(255,255,255,.96);border-bottom:1px solid rgba(203,213,225,.85);box-shadow:0 2px 12px rgba(15,23,42,.04);backdrop-filter:blur(12px)}
+.tb-title{font-family:var(--font-heading);font-size:1.05rem;font-weight:600;letter-spacing:-.015em}
+.search-box{background:#F8FAFC;border:1px solid var(--border);padding:8px 12px;border-radius:10px}
+.search-box:focus-within{border-color:var(--information);box-shadow:0 0 0 3px rgba(49,95,125,.10)}
+.tb-btn{border:1px solid var(--border);background:#fff;border-radius:10px;padding:8px 14px}
+.tb-btn:hover{border-color:#A8B8C8;background:#F8FAFC;transform:translateY(-1px)}
+.tb-btn.accent{background:var(--information);border-color:var(--information);box-shadow:0 6px 14px rgba(49,95,125,.18)}
+.tb-btn.accent:hover{background:#274F6B;border-color:#274F6B}
+.content{padding:30px 32px 64px}
+.ph{margin-bottom:24px}.ph-eye{font-family:var(--font-body);font-weight:700;color:var(--primary);letter-spacing:.12em}
+.ph-h{font-family:var(--font-heading);font-size:1.65rem;letter-spacing:-.025em}.ph-sub{font-size:.82rem;color:var(--muted);margin-top:5px}
+.card,.fc,.sem-card{background:#fff;border:1px solid rgba(217,226,236,.9);border-radius:14px;box-shadow:var(--shadow)}
+.card-hd,.fc-hd,.sem-card-hd,.m-hd{background:#FAFBFC;border-bottom:1px solid var(--border)}
+.card-hd{padding:16px 20px}.card-hd-title,.fc-hd h2,.sem-title,.m-hd h3{font-family:var(--font-heading);font-weight:600;letter-spacing:-.01em}
+.card-body{padding:20px 22px}
+.kpi-row{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:22px}
+.kpi{position:relative;background:#fff;border:1px solid rgba(217,226,236,.9);border-top:0;border-radius:14px;padding:19px 20px;box-shadow:var(--shadow);overflow:hidden}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:currentColor;opacity:.88}
+.kpi:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.kpi-ico{width:38px;height:38px;border-radius:11px;margin-bottom:14px}.kpi-ico svg{width:18px;height:18px}
+.kpi-v{font-family:var(--font-number);font-size:1.7rem;font-weight:800;letter-spacing:-.03em}
+.kpi-l{font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:.08em}
+.kpi.amber{color:#8A6824}.kpi.forest{color:var(--primary)}.kpi.steel{color:#466A82}
+.kpi.rust{color:var(--danger)}.kpi.teal{color:var(--success)}.kpi.plum{color:#667080}
+.dash-row{gap:18px;margin-bottom:18px}.dash-row.eq{gap:18px}
+.tbl-ctrl{background:#FAFBFC;border-bottom:1px solid var(--border);padding:13px 16px}
+.fsel,input[type=text],input[type=search],input[type=number],input[type=email],select.inp{
+  background:#fff;border:1px solid #CBD5E1;border-radius:10px;min-height:38px
+}
+.fsel:focus,input:focus,select.inp:focus{border-color:var(--information);box-shadow:0 0 0 3px rgba(49,95,125,.12)}
+thead th{background:#F8FAFC;color:#526173;border-bottom:1px solid var(--border);font-family:var(--font-body);font-weight:700}
+thead th:hover{background:#EEF4F8}tbody tr{border-bottom:1px solid #EDF1F5}tbody tr:hover{background:#F7FAFC}
+td{padding-top:12px;padding-bottom:12px}.td-mono{font-family:var(--font-mono)}
+.row-acts{opacity:.18}.row-acts:focus-within,tbody tr:hover .row-acts{opacity:1}
+.ra{border-radius:8px}.pg-b{border:1px solid var(--border);border-radius:8px;background:#fff}
+.pg-b.on{background:var(--primary);border-color:var(--primary)}
+.chip,.faculty-tag{border-radius:999px;font-weight:600}
+.faculty-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;font-size:.68rem;border:1px solid transparent;white-space:nowrap}
+.faculty-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.fac-engineering{background:#EAF0F4;color:#315F7D;border-color:#C7D6E0}
+.fac-science{background:#EDF3EF;color:#3F6F52;border-color:#CBDCCF}
+.fac-business{background:#F6F0E7;color:#855929;border-color:#E6D5BC}
+.fac-arts{background:#F0EDF2;color:#675A72;border-color:#D8D0DC}
+.fac-medicine{background:#F6ECEC;color:#963B3E;border-color:#E5C9CA}
+.fac-default{background:#EEF1F3;color:#4F5E6A;border-color:#D5DDE3}
+.fc-body{padding:24px}.fc-foot{padding:14px 24px 22px}.eblock{background:#F8FAFC;border:1px solid var(--border);border-radius:12px;padding:18px}
+.btn{border-radius:10px;font-weight:600;min-height:38px;box-shadow:none}
+.btn-forest{background:var(--success);color:#fff}.btn-forest:hover{background:#335C43}
+.btn-amber{background:var(--warning);color:#fff}.btn-amber:hover{background:#7E5119}
+.btn-rust{background:var(--danger);color:#fff;border-color:var(--danger)}.btn-rust:hover{background:#8C3235}
+.btn-steel{background:var(--information);color:#fff;border-color:var(--information)}.btn-steel:hover{background:#274F6B}
+.btn-ghost{background:#fff;color:#334155;border:1px solid #CBD5E1}.btn-ghost:hover{background:#F8FAFC;border-color:#94A3B8}
+.cgpa-banner{top:64px;background:linear-gradient(100deg,#123B5D,#0A2D46);border-bottom:3px solid var(--accent);box-shadow:0 8px 20px rgba(10,45,70,.16)}
+.cgpa-val,.cgpa-stat .sv{font-family:var(--font-number)}
+.sem-node.current{border-color:var(--primary);color:var(--primary);background:var(--primary-soft)}
+.sem-node.has-data{border-color:var(--accent-dark);color:#73591C;background:#F8F3E8}.sem-line.done{background:#C9B06B}
+.overlay{background:rgba(15,23,42,.58)}.modal{background:#fff;border:1px solid rgba(255,255,255,.45);border-radius:16px}
+.toast{background:#fff;color:var(--text);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:10px}
+.toast.ok{border-left-color:var(--success)}.toast.err{border-left-color:var(--danger)}.toast.info{border-left-color:var(--information)}
+
+
+.sb-foot{color:rgba(255,255,255,.56);font-size:.64rem}
+.sb-foot span{opacity:.76!important}
+.sb-grp{font-size:.61rem}
+.danger-nav{color:#FFB4B4!important}
+.danger-nav:hover{background:rgba(198,40,40,.18)!important;color:#FFD5D5!important}
+thead th{font-size:.66rem}
+
+@media(max-width:1100px){.kpi-row{grid-template-columns:repeat(3,minmax(0,1fr))}.search-box{min-width:180px}.content{padding:26px 24px 56px}}
+@media(max-width:860px){
+  .sidebar{transform:translateX(-105%);transition:transform var(--trans);z-index:120;width:min(290px,86vw);min-width:0}
+  .sidebar.open{transform:translateX(0)}.sidebar-backdrop.open{display:block;z-index:110}.sidebar-close,.mobile-menu-btn{display:flex}
+  .main{margin-left:0}.topbar{padding:0 18px}.content{padding:24px 18px 48px}.cgpa-banner{top:64px}
+  .kpi-row{grid-template-columns:repeat(2,minmax(0,1fr))}.dash-row,.dash-row.eq{grid-template-columns:1fr}
+  .frow.c2,.frow.c3,.frow.c4{grid-template-columns:1fr}.transcript-wrap{max-width:100%}
+  .semester{padding-left:8px!important;padding-right:8px!important}.sem-spine{width:48px}.sem-card{margin-left:8px!important}
+}
+@media(max-width:620px){
+  .topbar{gap:9px;padding:0 12px}.tb-title{font-size:.94rem}.search-box{min-width:0;flex:1;padding:7px 9px}
+  .tb-btn{padding:8px}.tb-btn{font-size:0;gap:0}.tb-btn svg{width:17px;height:17px}.print-action{display:none}
+  .content{padding:20px 12px 42px}.ph-h{font-size:1.4rem}.kpi-row{grid-template-columns:1fr 1fr;gap:10px}.kpi{padding:16px}.kpi-v{font-size:1.42rem}
+  .card-hd,.card-body{padding-left:15px;padding-right:15px}.tbl-ctrl{align-items:stretch}.fsel{flex:1 1 140px}.tc-sp{display:none}
+  .cgpa-banner{gap:12px;padding:10px 14px}.cgpa-divider{display:none}.cgpa-actions{width:100%;margin-left:0}.cgpa-actions .btn{flex:1;justify-content:center}
+  .sem-spine{display:none}.sem-card{margin-left:0!important}.semester{display:block}.sem-card-hd{align-items:flex-start}.sem-meta{width:100%}
+  .cu-table{min-width:760px}.modal{max-height:92vh;overflow:auto}.m-body,.m-hd,.m-foot{padding-left:16px;padding-right:16px}
+  .t-stack{left:12px;right:12px;top:12px}.toast{max-width:none}.cls-lbl{width:112px}
+}
+@media(max-width:390px){.kpi-row{grid-template-columns:1fr}.tb-title{max-width:115px;overflow:hidden;text-overflow:ellipsis}.search-box{max-width:145px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* ══ REFINED ACADEMIC PALETTE & CONTRAST ══ */
+.cgpa-label,.cgpa-stat .sl{color:rgba(255,255,255,.78)}
+.cgpa-stat .sv{color:#E5CE88}
+.cgpa-divider{background:rgba(255,255,255,.28)}
+.btn-on-dark{background:rgba(255,255,255,.08);color:#FFFFFF;border:1px solid rgba(255,255,255,.52);box-shadow:none}
+.btn-on-dark:hover{background:rgba(255,255,255,.17);border-color:#FFFFFF;color:#FFFFFF;transform:translateY(-1px)}
+.btn-on-dark-primary{background:var(--accent);border-color:var(--accent);color:#172B3A;font-weight:700}
+.btn-on-dark-primary:hover{background:#C6A64D;border-color:#C6A64D;color:#172B3A}
+.kpi.amber{color:#8A6824}.kpi.forest{color:var(--primary)}.kpi.steel{color:#466A82}
+.kpi.rust{color:var(--danger)}.kpi.teal{color:var(--success)}.kpi.plum{color:#667080}
+.kpi.amber .kpi-ico{background:#F5F0E5;color:#8A6824}
+.kpi.forest .kpi-ico,.kpi.steel .kpi-ico{background:#EAF0F4;color:var(--primary)}
+.kpi.teal .kpi-ico{background:#EDF3EF;color:var(--success)}
+.kpi.rust .kpi-ico{background:#F6ECEC;color:var(--danger)}
+.kpi.plum .kpi-ico{background:#EEF1F3;color:#667080}
+.c-fc{background:#EAF0F4;color:#294F69;border-color:#C7D6E0}
+.c-scu{background:#EDF3EF;color:#365E47;border-color:#CBDCCF}
+.c-scl{background:#EEF1F3;color:#53606B;border-color:#D5DDE3}
+.c-pass{background:#F6F0E7;color:#795024;border-color:#E6D5BC}
+.c-fail{background:#F6ECEC;color:#8A3639;border-color:#E5C9CA}
+.gA{background:#EAF2EC;color:#2F6043;border-color:#C9DCCF}
+.gBp{background:#EAF0F4;color:#315F7D;border-color:#C7D6E0}
+.gB{background:#EEF1F3;color:#455561;border-color:#D5DDE3}
+.gCp{background:#F2F1E8;color:#6B612D;border-color:#DDD9BC}
+.gC{background:#F7F1E5;color:#795522;border-color:#E8D8B8}
+.gDp{background:#F7EDE6;color:#824D2D;border-color:#E5CFBF}
+.gD{background:#F6E9E9;color:#843B3E;border-color:#E5C8C9}
+.gF{background:#F4E3E4;color:#872F34;border-color:#DFBFC1}
+.sb-btn{color:rgba(255,255,255,.82)}
+.sb-grp{color:rgba(255,255,255,.58)}
+.sb-foot{color:rgba(255,255,255,.70)}
+
+
+/* ══ FINAL HIGH-CONTRAST READABILITY PASS ══ */
+:root{
+  --text:#17212B;
+  --muted:#465564;
+  --border:#C9D3DD;
+  --ink2:#273647;
+  --ink4:#5D6C7A;
+  --ink5:#AAB6C2;
+}
+body{font-weight:400;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+.ph-h,.tb-title,.card-hd-title,.fc-hd h2,.sem-title,.m-hd h3{color:#17212B}
+.ph-sub,.fc-hd p,.m-hd p,.fhint,.pager-info,.sem-empty,.sem-units,.empty-st{color:#465564}
+.ph-sub{font-size:.86rem;line-height:1.55}
+.ph-eye{color:#745919;font-size:.64rem;font-weight:700}
+.card-hd-title{font-size:1.02rem;font-weight:600}
+.card-body{color:#273647}
+.kpi-v{color:#17212B;font-weight:800}
+.kpi-l{color:#465564;font-size:.7rem;font-weight:700}
+.cls-lbl{color:#273647;font-weight:600}
+.cls-n,.cls-p,.hlbl{color:#526171;font-weight:600}
+.hlbl{font-size:.58rem}
+.top-row,.td-b{color:#17212B}
+.pager-info{font-weight:500}
+table{color:#17212B;font-size:.81rem}
+thead th{color:#35465A;font-size:.68rem;font-weight:700}
+td{color:#202C39}
+.td-mono{color:#35465A}
+tbody tr:focus-visible{outline:3px solid rgba(49,95,125,.32);outline-offset:-3px;background:#F4F8FB}
+input,select,.fsel{color:#17212B;font-weight:500}
+input::placeholder,.search-box input::placeholder{color:#647487;opacity:1}
+input:disabled{opacity:1!important;color:#536273!important;background:#EDF1F4!important;border-color:#CAD3DC!important;-webkit-text-fill-color:#536273}
+label.lbl{color:#334355;font-size:.68rem;font-weight:700}
+.fhint{font-size:.69rem;line-height:1.45}
+.ferr{font-size:.69rem;font-weight:600}
+.elbl{color:#745919;font-weight:700}
+.btn{font-weight:700}
+.btn-ghost{color:#273647;border-color:#AEBBC7}
+.btn-ghost:hover{color:#17212B;border-color:#718193;background:#F5F8FA}
+.btn-on-dark{color:#FFFFFF;border-color:rgba(255,255,255,.78);background:rgba(255,255,255,.10)}
+.btn-on-dark:hover,.btn-on-dark:focus-visible{color:#FFFFFF;border-color:#FFFFFF;background:rgba(255,255,255,.20)}
+.btn-on-dark-primary{color:#172B3A;background:#D7B95E;border-color:#E5CC7F}
+.btn-on-dark-primary:hover,.btn-on-dark-primary:focus-visible{color:#102331;background:#E1C875;border-color:#F0DC9F}
+.sb-uni{color:#F0D98D;font-weight:700}
+.sb-sys{color:#FFFFFF;font-weight:600}
+.sb-yr{color:#E4EAF0;background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.18)}
+.sb-s .v{color:#F0D98D;font-weight:800}
+.sb-s .l{color:#E1E7EC;font-size:.59rem;font-weight:600}
+.sb-grp{color:#CBD6DF;font-size:.62rem}
+.sb-btn{color:#EEF3F7;font-size:.8rem;font-weight:500}
+.sb-btn svg{opacity:.88}
+.sb-btn:hover{background:rgba(255,255,255,.10);color:#FFFFFF}
+.sb-btn.active{background:rgba(255,255,255,.13);color:#FFFFFF;border-left-color:#E3C86E;font-weight:700}
+.sb-badge{background:rgba(255,255,255,.13);color:#FFFFFF;border:1px solid rgba(255,255,255,.16)}
+.sb-foot{color:#D7E0E7;font-size:.65rem}
+.sb-foot span{color:#C8D3DC;opacity:1!important}
+.search-box svg{color:#556779}
+.ra{color:#526273}
+.row-acts{opacity:.55}
+.c-gray{color:#465564;border-color:#C2CDD7;background:#EEF2F5}
+.cgpa-label,.cgpa-stat .sl{color:#EDF3F7;font-size:.62rem;font-weight:700}
+.cgpa-stat .sv{color:#F0D98D;font-weight:800}
+.cgpa-cls{color:#FFFFFF}
+.cgpa-divider{background:rgba(255,255,255,.38)}
+.sem-meta [style*="color:var(--ink4)"],
+.semester-list [style*="color:var(--ink4)"]{color:#526171!important}
+.toast{color:#17212B;font-weight:600}
+.m-close{color:#465564}
+.m-close:hover{color:#17212B}
+@media(max-width:620px){
+  .ph-sub{font-size:.82rem}
+  table{font-size:.79rem}
+  .cgpa-actions .btn{min-width:0;padding-left:10px;padding-right:10px}
+}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebar()" aria-hidden="true"></div>
+<div class="app">
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="sidebar" id="sidebar" aria-label="Primary navigation">
+  <div class="sb-top">
+    <button class="sidebar-close" type="button" aria-label="Close navigation" onclick="closeSidebar()">×</button>
+    <div class="sb-crest">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+      </svg>
+    </div>
+    <div class="sb-uni">Kyambogo University</div>
+    <div class="sb-sys">Student Academic<br>Records System</div>
+    <div class="sb-yr">2025 / 2026</div>
+  </div>
+
+  <div class="sb-stats">
+    <div class="sb-s"><span class="v" id="ss-total">0</span><span class="l">Students</span></div>
+    <div class="sb-s"><span class="v" id="ss-avg" style="font-size:.9rem">—</span><span class="l">Avg CGPA</span></div>
+    <div class="sb-s"><span class="v" id="ss-fc">0</span><span class="l">1st Class</span></div>
+    <div class="sb-s"><span class="v" id="ss-fail" style="color:var(--rust2)">0</span><span class="l">Failing</span></div>
+  </div>
+
+  <nav class="sb-nav" aria-label="Student records sections">
+    <div class="sb-grp">Overview</div>
+    <button class="sb-btn active" onclick="nav('dashboard')" id="nav-dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </button>
+    <div class="sb-grp">Students</div>
+    <button class="sb-btn" onclick="nav('students')" id="nav-students">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      All Students
+      <span class="sb-badge" id="sb-badge">0</span>
+    </button>
+    <button class="sb-btn" onclick="nav('enrol')" id="nav-enrol">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+      Enrol Student
+    </button>
+    <button class="sb-btn" onclick="nav('search')" id="nav-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Search
+    </button>
+    <div class="sb-grp">Academic</div>
+    <button class="sb-btn" onclick="nav('reports')" id="nav-reports">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Reports
+    </button>
+    <div class="sb-grp">Data</div>
+    <button class="sb-btn" onclick="exportCSV()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export CSV
+    </button>
+    <button class="sb-btn" onclick="document.getElementById('csv-in').click()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Import CSV
+    </button>
+    <input type="file" id="csv-in" accept=".csv,text/csv" aria-label="Import students from CSV" style="display:none" onchange="importCSV(event)">
+    <div class="sb-grp">System</div>
+    <button class="sb-btn danger-nav" onclick="askClear()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+      Clear All
+    </button>
+  </nav>
+  <div class="sb-foot">
+    BEng Automotive &amp; Power Engineering<br>
+    Dept. Mechanical &amp; Production Engineering<br>
+    Programming for Mechanical Engineers<br>
+    24/U/APD/11369/PD · AY 2025/2026<br>
+    <span style="font-size:.6rem;line-height:1.65;display:block;margin-top:7px;border-top:1px solid rgba(255,255,255,.18);padding-top:7px">
+      Course assignment. Not an official<br>Kyambogo University system.
+    </span>
+  </div>
+</aside>
+
+<!-- ══════════ MAIN ══════════ -->
+<main class="main" id="main-content">
+  <header class="topbar">
+    <button class="mobile-menu-btn" type="button" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false" onclick="toggleSidebar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <div class="tb-title" id="tb-title">Dashboard</div>
+    <div class="tb-space"></div>
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="search" id="g-search" aria-label="Search all students" autocomplete="off" placeholder="Search students…" oninput="gSearch(this.value)">
+    </div>
+    <div class="tb-btns">
+      <button class="tb-btn print-action" type="button" aria-label="Print current view" onclick="smartPrint()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print
+      </button>
+      <button class="tb-btn accent" type="button" aria-label="Add student" onclick="nav('enrol')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+        Add Student
+      </button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ── DASHBOARD ── -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="ph"><div class="ph-eye">Overview</div>
+        <div class="ph-h">Academic Dashboard</div>
+        <div class="ph-sub">Live snapshot of student academic standing.</div>
+      </div>
+      <div class="kpi-row" id="kpi-row"></div>
+      <div class="dash-row">
+        <div class="card"><div class="card-hd"><span class="card-hd-title">Classification Breakdown</span></div><div class="card-body" id="cls-bk"></div></div>
+        <div class="card"><div class="card-hd"><span class="card-hd-title">CGPA Distribution</span></div>
+          <div class="card-body"><div class="hist" id="hist"></div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px">
+              <span style="font-size:.55rem;color:var(--ink4);font-family:var(--font-number)">0.0</span>
+              <span style="font-size:.55rem;color:var(--ink4);font-family:var(--font-number)">5.0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-row eq" style="margin-top:12px">
+        <div class="card"><div class="card-hd"><span class="card-hd-title">Top Performers</span></div><div class="card-body" id="top-perf"></div></div>
+        <div class="card"><div class="card-hd"><span class="card-hd-title">Recent Activity</span></div><div class="card-body" id="act-log"></div></div>
+      </div>
+    </div>
+
+    <!-- ── STUDENTS ── -->
+    <div class="panel" id="panel-students">
+      <div class="ph"><div class="ph-eye">Records</div>
+        <div class="ph-h">Student Register</div>
+        <div class="ph-sub">Click a row to open the full academic transcript.</div>
+      </div>
+      <div class="card">
+        <div class="tbl-ctrl">
+          <select class="fsel" id="f-cls" onchange="applyF();renderT()">
+            <option value="">All Classifications</option>
+            <option>First Class</option><option>Second Class Upper</option>
+            <option>Second Class Lower</option><option>Pass</option><option>Fail</option>
+          </select>
+          <select class="fsel" id="f-yr" onchange="applyF();renderT()">
+            <option value="">All Years</option>
+            <option value="1">Year 1</option><option value="2">Year 2</option>
+            <option value="3">Year 3</option><option value="4">Year 4</option>
+          </select>
+          <select class="fsel" id="f-prog" onchange="applyF();renderT()">
+            <option value="">All Programmes</option>
+          </select>
+          <div class="tc-sp"></div>
+          <select class="fsel" onchange="perPage=+this.value;pg=1;renderT()">
+            <option value="10">10 / page</option><option value="20">20</option><option value="50">50</option>
+          </select>
+        </div>
+        <div style="overflow-x:auto"><table>
+          <thead><tr>
+            <th data-sort="name" tabindex="0" role="button" aria-label="Sort by name" onclick="srt('name')" onkeydown="sortKeydown(event,'name')">Name</th>
+            <th data-sort="reg" tabindex="0" role="button" aria-label="Sort by registration number" onclick="srt('reg')" onkeydown="sortKeydown(event,'reg')">Reg Number</th>
+            <th data-sort="programme" tabindex="0" role="button" aria-label="Sort by programme" onclick="srt('programme')" onkeydown="sortKeydown(event,'programme')">Programme</th>
+            <th data-sort="year" tabindex="0" role="button" aria-label="Sort by year" onclick="srt('year')" onkeydown="sortKeydown(event,'year')">Year</th>
+            <th data-sort="cgpa" tabindex="0" role="button" aria-label="Sort by CGPA" onclick="srt('cgpa')" onkeydown="sortKeydown(event,'cgpa')">CGPA</th>
+            <th>Classification</th>
+            <th>Semesters</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="t-body"></tbody>
+        </table></div>
+        <div class="empty-st" id="t-empty" style="display:none;text-align:center;padding:44px 20px;color:var(--ink4);font-size:.82rem">No students match the current filters.</div>
+        <div class="pg-row" id="t-pg"></div>
+      </div>
+    </div>
+
+    <!-- ── ENROL ── -->
+    <div class="panel" id="panel-enrol">
+      <div class="ph"><div class="ph-eye">Enrol</div>
+        <div class="ph-h">Register Students</div>
+        <div class="ph-sub">Add one or more students. Transcript data is entered separately after registration.</div>
+      </div>
+      <div class="fc" style="max-width:680px">
+        <div class="fc-hd"><h2>Student Details</h2><p>All starred fields required. Reg number must be unique.</p></div>
+        <div class="fc-body">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <label class="lbl" style="margin:0">Students to register:</label>
+            <button class="btn btn-ghost btn-xs" onclick="adjN(-1)">−</button>
+            <span id="n-disp" style="font-family:var(--font-number);font-weight:600;min-width:20px;text-align:center">1</span>
+            <button class="btn btn-ghost btn-xs" onclick="adjN(1)">+</button>
+          </div>
+          <div id="en-blocks"></div>
+        </div>
+        <div class="fc-foot">
+          <button class="btn btn-forest" onclick="submitEnrol()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Save
+          </button>
+          <button class="btn btn-ghost" onclick="resetEnrol()">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SEARCH ── -->
+    <div class="panel" id="panel-search">
+      <div class="ph"><div class="ph-eye">Find</div>
+        <div class="ph-h">Search</div>
+        <div class="ph-sub">Search by name or registration number.</div>
+      </div>
+      <div class="fc" style="max-width:480px;margin-bottom:18px">
+        <div class="fc-body">
+          <input type="text" id="s-q" maxlength="100" autocomplete="off" placeholder="Name or reg number…" oninput="liveS(this.value)" style="width:100%">
+        </div>
+      </div>
+      <div id="s-results"></div>
+    </div>
+
+    <!-- ── REPORTS ── -->
+    <div class="panel" id="panel-reports">
+      <div class="ph"><div class="ph-eye">Academic</div>
+        <div class="ph-h">Reports</div>
+        <div class="ph-sub">Programme and year-level academic analytics.</div>
+      </div>
+      <div class="dash-row eq" style="margin-bottom:14px">
+        <div class="card" id="rpt-prog"></div>
+        <div class="card" id="rpt-yr"></div>
+      </div>
+      <div class="card" id="rpt-full"></div>
+    </div>
+
+    <!-- ── TRANSCRIPT ── -->
+    <div class="panel" id="panel-transcript">
+      <div id="transcript-content"></div>
+    </div>
+
+  </div><!-- /content -->
+</main><!-- /main -->
+</div><!-- /app -->
+
+<!-- ══════════ MODALS ══════════ -->
+<!-- Edit student -->
+<div class="overlay" id="ov-edit" aria-hidden="true">
+  <div class="modal modal-md" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="m-hd">
+      <div><h3>Edit Student</h3><p id="edit-sub"></p></div>
+      <button class="m-close" type="button" aria-label="Close dialog" onclick="closeOv('ov-edit')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="m-body">
+      <div class="frow c2">
+        <div class="field"><label class="lbl req">Name</label><input type="text" id="e-name" maxlength="100" autocomplete="name"></div>
+        <div class="field"><label class="lbl">Reg No (read-only)</label><input type="text" id="e-reg" disabled></div>
+      </div>
+      <div class="frow c3">
+        <div class="field"><label class="lbl">Programme</label><select class="inp" id="e-prog"></select></div>
+        <div class="field"><label class="lbl">Year</label>
+          <select class="inp" id="e-yr"><option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4">Year 4</option></select>
+        </div>
+        <div class="field"><label class="lbl">Email</label><input type="email" id="e-email" maxlength="120" autocomplete="email" placeholder="student@kyu.ac.ug"></div>
+      </div>
+    </div>
+    <div class="m-foot">
+      <button class="btn btn-ghost" onclick="closeOv('ov-edit')">Cancel</button>
+      <button class="btn btn-forest" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add course unit -->
+<div class="overlay" id="ov-cu" aria-hidden="true">
+  <div class="modal modal-md" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="m-hd">
+      <div><h3>Add Course Unit</h3><p id="cu-sub"></p></div>
+      <button class="m-close" type="button" aria-label="Close dialog" onclick="closeOv('ov-cu')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="m-body">
+      <div class="frow c2">
+        <div class="field"><label class="lbl req">Course Name</label><input type="text" id="cu-name" maxlength="120" placeholder="e.g. Engineering Mathematics II"></div>
+        <div class="field"><label class="lbl req">Course Code</label><input type="text" id="cu-code" maxlength="24" autocapitalize="characters" placeholder="e.g. EMA2201"></div>
+      </div>
+      <div class="frow c3">
+        <div class="field"><label class="lbl req">Credit Hours</label>
+          <select class="inp" id="cu-cr"><option value="1">1 credit</option><option value="2">2 credits</option><option value="3" selected>3 credits</option><option value="4">4 credits</option></select>
+        </div>
+        <div class="field"><label class="lbl req">Marks (0–100)</label>
+          <input type="number" id="cu-marks" min="0" max="100" placeholder="0–100" oninput="markPreview()">
+        </div>
+        <div class="field" style="display:flex;flex-direction:column;justify-content:flex-end">
+          <div id="cu-preview" style="font-family:var(--font-number);font-size:.8rem;font-weight:600;padding:8px 0"></div>
+        </div>
+      </div>
+    </div>
+    <div class="m-foot">
+      <button class="btn btn-ghost" onclick="closeOv('ov-cu')">Cancel</button>
+      <button class="btn btn-amber" onclick="saveCU()">Add Course Unit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add semester -->
+<div class="overlay" id="ov-sem" aria-hidden="true">
+  <div class="modal modal-sm" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="m-hd">
+      <div><h3>Add Semester</h3><p id="sem-sub"></p></div>
+      <button class="m-close" type="button" aria-label="Close dialog" onclick="closeOv('ov-sem')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="m-body">
+      <div class="frow c2">
+        <div class="field"><label class="lbl req">Year</label>
+          <select class="inp" id="sem-yr"><option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4">Year 4</option></select>
+        </div>
+        <div class="field"><label class="lbl req">Semester</label>
+          <select class="inp" id="sem-num"><option value="1">Semester 1</option><option value="2">Semester 2</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="m-foot">
+      <button class="btn btn-ghost" onclick="closeOv('ov-sem')">Cancel</button>
+      <button class="btn btn-forest" onclick="saveSem()">Add Semester</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm -->
+<div class="overlay" id="ov-confirm" aria-hidden="true">
+  <div class="modal modal-sm" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="m-hd">
+      <div><h3 id="cf-title">Confirm</h3><p id="cf-sub"></p></div>
+      <button class="m-close" type="button" aria-label="Close dialog" onclick="closeOv('ov-confirm')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="m-body"><p id="cf-msg" style="font-size:.82rem;color:var(--ink2);line-height:1.6"></p></div>
+    <div class="m-foot">
+      <button class="btn btn-ghost" onclick="closeOv('ov-confirm')">Cancel</button>
+      <button class="btn btn-rust" id="cf-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div class="t-stack" id="t-stack"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// CONSTANTS
+// ════════════════════════════════════════════════════════════
+const STORAGE_KEY = 'kyu-srms-state-v2';
+const STORAGE_VERSION = 2;
+const MAX_IMPORT_BYTES = 2 * 1024 * 1024;
+let lastFocusedElement = null;
+let storageWarningShown = false;
+
+const PROGRAMMES = [
+  'Automotive & Power Engineering',
+  'Mechanical Engineering',
+  'Electrical Engineering',
+  'Civil Engineering',
+  'Computer Engineering',
+  'Chemical Engineering'
+];
+
+const COURSE_NAMES = [
+  ['Engineering Mathematics','Calculus & Analytical Geometry','Engineering Physics',
+   'Engineering Drawing','Introduction to Computing','Technical Communication',
+   'Workshop Technology','Engineering Chemistry'],
+  ['Engineering Mathematics II','Fluid Mechanics','Thermodynamics I',
+   'Strength of Materials','Electrical Technology','Engineering Statistics',
+   'Programming for Engineers'],
+  ['Thermodynamics II','Machine Design','Heat Transfer','Control Systems',
+   'Manufacturing Processes','Engineering Economics','Internal Combustion Engines',
+   'Hydraulics & Pneumatics'],
+  ['Vehicle Dynamics','Automotive Electronics','Project Management',
+   'Reliability Engineering','Finite Element Analysis','Industrial Attachment','Final Year Project I'],
+];
+
+// ════════════════════════════════════════════════════════════
+// GRADING ENGINE
+// ════════════════════════════════════════════════════════════
+function gradeFromMark(m){
+  if(m>=80)return{grade:'A', gp:5.0, chip:'gA'};
+  if(m>=75)return{grade:'B+',gp:4.5, chip:'gBp'};
+  if(m>=70)return{grade:'B', gp:4.0, chip:'gB'};
+  if(m>=65)return{grade:'C+',gp:3.5, chip:'gCp'};
+  if(m>=60)return{grade:'C', gp:3.0, chip:'gC'};
+  if(m>=55)return{grade:'D+',gp:2.5, chip:'gDp'};
+  if(m>=50)return{grade:'D', gp:2.0, chip:'gD'};
+  return       {grade:'F', gp:0.0, chip:'gF'};
+}
+
+function semGPA(courses){
+  if(!courses||!courses.length)return null;
+  const totCr=courses.reduce((a,c)=>a+c.credits,0);
+  const totPts=courses.reduce((a,c)=>a+(gradeFromMark(c.marks).gp*c.credits),0);
+  return totCr>0?+(totPts/totCr).toFixed(2):null;
+}
+
+function computeCGPA(semesters){
+  const all=semesters.flatMap(s=>s.courses||[]);
+  if(!all.length)return null;
+  const totCr=all.reduce((a,c)=>a+c.credits,0);
+  const totPts=all.reduce((a,c)=>a+(gradeFromMark(c.marks).gp*c.credits),0);
+  return totCr>0?+(totPts/totCr).toFixed(2):null;
+}
+
+function classify(cgpa){
+  if(cgpa===null||cgpa===undefined)return{label:'No Data',chip:'c-gray',col:'var(--ink4)'};
+  if(cgpa>=4.40)return{label:'First Class',        chip:'c-fc', col:'#315F7D'};
+  if(cgpa>=3.60)return{label:'Second Class Upper', chip:'c-scu',col:'#3F6F52'};
+  if(cgpa>=2.80)return{label:'Second Class Lower', chip:'c-scl',col:'#5E6872'};
+  if(cgpa>=2.00)return{label:'Pass',               chip:'c-pass',col:'#855929'};
+  return             {label:'Fail',                chip:'c-fail',col:'#963B3E'};
+}
+
+function gpaColor(gpa){
+  if(gpa===null)return'var(--ink4)';
+  if(gpa>=4.40)return'#315F7D';if(gpa>=3.60)return'#3F6F52';
+  if(gpa>=2.80)return'#5E6872';if(gpa>=2.00)return'#855929';return'#963B3E';
+}
+
+// ════════════════════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════════════════════
+let demoSeed=20260719;
+function seededRandom(){demoSeed=(demoSeed*1664525+1013904223)>>>0;return demoSeed/4294967296;}
+function rMark(lo=50,hi=100){return Math.floor(lo+seededRandom()*(hi-lo+1));}
+function pick(a){return a[Math.floor(seededRandom()*a.length)];}
+function rCr(){return pick([2,3,3,3,4]);}
+
+function genSemesters(year){
+  const sems=[];
+  const total=year*2-Math.floor(seededRandom()*2); // roughly 2 per year
+  for(let i=0;i<Math.min(total,year*2);i++){
+    const y=Math.floor(i/2)+1, s=(i%2)+1;
+    const nCourses=5+Math.floor(seededRandom()*3); // 5–7
+    const pool=[...COURSE_NAMES[Math.min(y-1,3)]];
+    const courses=[];
+    for(let j=0;j<nCourses;j++){
+      const nameIdx=Math.floor(seededRandom()*pool.length);
+      const name=pool.splice(nameIdx,1)[0]||`Course Unit ${j+1}`;
+      const suffix=` ${y}${s}0${j+1}`;
+      courses.push({
+        name,
+        code:(name.split(' ').map(w=>w[0]).join('')).toUpperCase()+`${y}${s}0${j+1}`,
+        credits:rCr(),
+        marks:rMark(year<3?55:48)
+      });
+    }
+    sems.push({year:y,sem:s,courses});
+  }
+  return sems;
+}
+
+const NAMES=[
+  'Alice Nakamura','Bob Ssemanda','Carol Atim','David Okello','Esther Birungi',
+  'Frank Mugisha','Grace Nansubuga','Henry Ochen','Irene Apio','James Tumwine',
+  'Kemi Adeyemi','Liam Kyeyune','Mary Namusoke','Nathan Obote','Olive Aber',
+  'Paul Wasswa','Queen Nanteza','Robert Mwesige','Sandra Akello','Tom Bwire'
+];
+
+function createSampleStudents(){
+  demoSeed=20260719;
+  return NAMES.map((name,i)=>{
+    const yr=1+Math.floor(i/5);
+    return{
+      id:'S'+(1000+i), name,
+      reg:`24/U/APD/${String(i+1).padStart(3,'0')}/PD`,
+      programme:PROGRAMMES[i%PROGRAMMES.length],
+      year:yr,
+      email:name.split(' ')[0].toLowerCase()+'@kyu.ac.ug',
+      enrolledDate:`2024-0${1+Math.floor(i/7)}-${10+(i%15)}`,
+      semesters:genSemesters(yr)
+    };
+  });
+}
+
+const restoredState=loadState();
+let students=restoredState?.students||createSampleStudents();
+let activity=restoredState?.activity||[{text:'System initialised with 20 sample students',time:'Just now',col:'var(--steel)'}];
+let editReg=null, cuReg=null, cuSemIdx=null, semReg=null;
+let sortKey='name',sortDir=1,fCls='',fYr='',fProg='',pg=1,perPage=10;
+let displayed=[];
+
+
+// ════════════════════════════════════════════════════════════
+// STORAGE, VALIDATION & UI HELPERS
+// ════════════════════════════════════════════════════════════
+function makeId(){
+  if(globalThis.crypto?.randomUUID)return crypto.randomUUID();
+  return `S-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+function regKey(value){return String(value||'').trim().toUpperCase();}
+function validReg(value){return /^[A-Za-z0-9][A-Za-z0-9/_-]{2,63}$/.test(String(value||'').trim());}
+function validEmail(value){return !value||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value).trim());}
+function cleanText(value,max=120){return String(value||'').replace(/[\u0000-\u001F\u007F]/g,' ').replace(/\s+/g,' ').trim().slice(0,max);}
+function clampYear(value){const n=Number(value);return Number.isInteger(n)&&n>=1&&n<=4?n:1;}
+function normaliseCourse(course){
+  if(!course||typeof course!=='object')return null;
+  const name=cleanText(course.name,120),code=cleanText(course.code,24).toUpperCase();
+  const credits=Math.min(4,Math.max(1,Number(course.credits)||3));
+  const marks=Math.min(100,Math.max(0,Number(course.marks)||0));
+  return name&&code?{name,code,credits,marks}:null;
+}
+function normaliseStudent(student){
+  if(!student||typeof student!=='object')return null;
+  const name=cleanText(student.name,100),reg=cleanText(student.reg,64).toUpperCase();
+  if(!name||!validReg(reg))return null;
+  const semesters=Array.isArray(student.semesters)?student.semesters.slice(0,8).map(sm=>({
+    year:clampYear(sm?.year),sem:Number(sm?.sem)===2?2:1,
+    courses:Array.isArray(sm?.courses)?sm.courses.slice(0,7).map(normaliseCourse).filter(Boolean):[]
+  })).filter((sm,i,a)=>a.findIndex(x=>x.year===sm.year&&x.sem===sm.sem)===i):[];
+  return{
+    id:cleanText(student.id,80)||makeId(),name,reg,
+    programme:cleanText(student.programme,100)||PROGRAMMES[0],
+    year:clampYear(student.year),
+    email:validEmail(student.email)?cleanText(student.email,120):'',
+    enrolledDate:/^\d{4}-\d{2}-\d{2}$/.test(student.enrolledDate||'')?student.enrolledDate:new Date().toISOString().slice(0,10),
+    semesters
+  };
+}
+function loadState(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return null;
+    const parsed=JSON.parse(raw);if(parsed?.version!==STORAGE_VERSION||!Array.isArray(parsed.students))return null;
+    const seen=new Set();
+    const safeStudents=parsed.students.map(normaliseStudent).filter(Boolean).filter(s=>{const k=regKey(s.reg);if(seen.has(k))return false;seen.add(k);return true;});
+    const safeActivity=Array.isArray(parsed.activity)?parsed.activity.slice(0,20).map(a=>({text:cleanText(a?.text,180),time:cleanText(a?.time,30),col:safeActivityColor(cleanText(a?.col,40))})):[];
+    return{students:safeStudents,activity:safeActivity};
+  }catch(error){console.warn('Stored data could not be loaded.',error);return null;}
+}
+function persistState(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify({version:STORAGE_VERSION,updatedAt:new Date().toISOString(),students,activity}));}
+  catch(error){
+    console.warn('Local data could not be saved.',error);
+    if(!storageWarningShown&&document.getElementById('t-stack')){storageWarningShown=true;toast('Browser storage is unavailable. Changes may not survive a refresh.','err');}
+  }
+}
+function safeActivityColor(value){const allowed=['var(--steel)','var(--teal)','var(--sage)','var(--rust)','var(--amber)','var(--information)','var(--success)','var(--danger)'];return allowed.includes(value)?value:'var(--information)';}
+function facultyMeta(programme){
+  const p=String(programme||'').toLowerCase();
+  if(/medicine|medical|health|nursing|pharmacy/.test(p))return{className:'fac-medicine',label:'Medicine'};
+  if(/business|commerce|account|management|econom/.test(p))return{className:'fac-business',label:'Business'};
+  if(/arts|humanit|language|social/.test(p))return{className:'fac-arts',label:'Arts'};
+  if(/science|biology|chemistry|physics|mathemat/.test(p)&&!/engineering/.test(p))return{className:'fac-science',label:'Science'};
+  if(/engineering|technology|comput/.test(p))return{className:'fac-engineering',label:'Engineering'};
+  return{className:'fac-default',label:'Academic'};
+}
+function facultyTag(programme){const f=facultyMeta(programme);return `<span class="faculty-tag ${f.className}" title="${esc(f.label)} faculty accent">${esc(programme)}</span>`;}
+function toggleSidebar(){
+  const sidebar=document.getElementById('sidebar'),backdrop=document.getElementById('sidebar-backdrop'),button=document.querySelector('.mobile-menu-btn');
+  const open=!sidebar.classList.contains('open');sidebar.classList.toggle('open',open);backdrop.classList.toggle('open',open);
+  backdrop.setAttribute('aria-hidden',String(!open));button?.setAttribute('aria-expanded',String(open));
+}
+function closeSidebar(){
+  document.getElementById('sidebar')?.classList.remove('open');document.getElementById('sidebar-backdrop')?.classList.remove('open');
+  document.getElementById('sidebar-backdrop')?.setAttribute('aria-hidden','true');document.querySelector('.mobile-menu-btn')?.setAttribute('aria-expanded','false');
+}
+function sortKeydown(event,key){if(event.key==='Enter'||event.key===' '){event.preventDefault();srt(key);}}
+function updateSortHeaders(){document.querySelectorAll('th[data-sort]').forEach(th=>{const active=th.dataset.sort===sortKey;th.classList.toggle('asc',active&&sortDir===1);th.classList.toggle('desc',active&&sortDir===-1);th.setAttribute('aria-sort',active?(sortDir===1?'ascending':'descending'):'none');});}
+function rowKeydown(event,reg){if(event.key==='Enter'||event.key===' '){event.preventDefault();openTranscript(reg);}}
+
+// ════════════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════════════
+const TITLES={dashboard:'Dashboard',students:'Student Register',enrol:'Enrol Student',search:'Search',reports:'Reports',transcript:'Academic Transcript'};
+function nav(id){
+  closeSidebar();
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  const nb=document.getElementById('nav-'+id);if(nb)nb.classList.add('active');
+  document.getElementById('tb-title').textContent=TITLES[id]||id;
+  if(id==='dashboard')renderDash();
+  if(id==='students'){applyF();renderT();}
+  if(id==='enrol')renderEnBlocks();
+  if(id==='reports')renderReports();
+  window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+}
+
+// ════════════════════════════════════════════════════════════
+// SIDEBAR STATS
+// ════════════════════════════════════════════════════════════
+function updateSS(){
+  const n=students.length;
+  const cgpas=students.map(s=>computeCGPA(s.semesters)).filter(x=>x!==null);
+  const avg=cgpas.length?+(cgpas.reduce((a,b)=>a+b,0)/cgpas.length).toFixed(2):null;
+  const fc=cgpas.filter(g=>g>=4.40).length;
+  const fail=cgpas.filter(g=>g<2.00).length;
+  document.getElementById('ss-total').textContent=n;
+  document.getElementById('ss-avg').textContent=avg!==null?avg:'—';
+  document.getElementById('ss-fc').textContent=fc;
+  document.getElementById('ss-fail').textContent=fail;
+  document.getElementById('sb-badge').textContent=n;
+  persistState();
+}
+
+// ════════════════════════════════════════════════════════════
+// DASHBOARD
+// ════════════════════════════════════════════════════════════
+function renderDash(){
+  updateSS();
+  const cgpas=students.map(s=>computeCGPA(s.semesters)).filter(x=>x!==null);
+  const n=students.length,avg=cgpas.length?+(cgpas.reduce((a,b)=>a+b,0)/cgpas.length).toFixed(2):null;
+  const fc=cgpas.filter(g=>g>=4.40).length;
+  const scu=cgpas.filter(g=>g>=3.60&&g<4.40).length;
+  const scl=cgpas.filter(g=>g>=2.80&&g<3.60).length;
+  const pass=cgpas.filter(g=>g>=2.00&&g<2.80).length;
+  const fail=cgpas.filter(g=>g<2.00).length;
+  const noData=n-cgpas.length;
+  const topGPA=cgpas.length?Math.max(...cgpas):null;
+  const totalCU=students.reduce((a,s)=>a+s.semesters.reduce((b,sm)=>b+sm.courses.length,0),0);
+
+  document.getElementById('kpi-row').innerHTML=`
+    <div class="kpi amber"><div class="kpi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="kpi-v">${n}</div><div class="kpi-l">Students</div></div>
+    <div class="kpi forest"><div class="kpi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg></div><div class="kpi-v">${avg!==null?avg.toFixed(2):'—'}</div><div class="kpi-l">Avg CGPA</div></div>
+    <div class="kpi steel"><div class="kpi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div><div class="kpi-v">${fc}</div><div class="kpi-l">First Class</div></div>
+    <div class="kpi teal"><div class="kpi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20v-6M6 20V10M18 20V4"/></svg></div><div class="kpi-v">${topGPA!==null?topGPA.toFixed(2):'—'}</div><div class="kpi-l">Highest CGPA</div></div>
+    <div class="kpi rust"><div class="kpi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div><div class="kpi-v">${fail}</div><div class="kpi-l">Failing</div></div>
+    <div class="kpi plum"><div class="kpi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="kpi-v">${totalCU}</div><div class="kpi-l">Total CU Results</div></div>
+  `;
+
+  const cdata=[
+    {l:'First Class',n:fc,c:'#315F7D'},{l:'Second Class Upper',n:scu,c:'#4F6E66'},
+    {l:'Second Class Lower',n:scl,c:'#667080'},{l:'Pass',n:pass,c:'#91601E'},{l:'Fail',n:fail,c:'#A63D40'},{l:'No Data',n:noData,c:'#8A96A1'}
+  ];
+  document.getElementById('cls-bk').innerHTML=cdata.map(d=>`
+    <div class="cls-row">
+      <div class="cls-dot" style="background:${d.c}"></div>
+      <div class="cls-lbl">${d.l}</div>
+      <div class="cls-trk"><div class="cls-fil" style="width:${n?((d.n/n)*100).toFixed(1):0}%;background:${d.c}"></div></div>
+      <div class="cls-n">${d.n}</div>
+      <div class="cls-p">${n?((d.n/n)*100).toFixed(0):0}%</div>
+    </div>`).join('');
+
+  const bkts=Array(10).fill(0);
+  cgpas.forEach(g=>{const b=Math.min(9,Math.floor(g/0.5));bkts[b]++;});
+  const mx=Math.max(...bkts,1);
+  const hcols=['#D4DEE5','#C6D3DC','#B7C7D2','#A7BBC8','#96AEBD','#829FAF','#6B8C9F','#55788D','#3E647D','#274F6B'];
+  document.getElementById('hist').innerHTML=bkts.map((cnt,i)=>`
+    <div class="hcol">
+      <div class="hbar" style="height:${(cnt/mx)*100}%;background:${hcols[i]}" title="${(i*0.5).toFixed(1)}–${((i+1)*0.5).toFixed(1)}: ${cnt}"></div>
+      <div class="hlbl">${(i*0.5).toFixed(1)}</div>
+    </div>`).join('');
+
+  const top=[...students].sort((a,b)=>{
+    const ca=computeCGPA(a.semesters)||0,cb=computeCGPA(b.semesters)||0;return cb-ca;
+  }).slice(0,5);
+  document.getElementById('top-perf').innerHTML=top.map((s,i)=>{
+    const cg=computeCGPA(s.semesters);
+    const mc=i===0?'m1':i===1?'m2':i===2?'m3':'mn';
+    const mt=i<3?['🥇','🥈','🥉'][i]:i+1;
+    const cl=classify(cg);
+    return`<div class="top-row"><div class="medal ${mc}">${mt}</div><div style="flex:1;font-weight:500;font-size:.78rem">${esc(s.name)}</div><span style="font-family:var(--font-number);font-weight:600;font-size:.78rem;color:${gpaColor(cg)}">${cg!==null?cg.toFixed(2):'—'}</span><span class="chip ${cl.chip}" style="font-size:.62rem">${cl.label}</span></div>`;
+  }).join('')||'<div style="color:var(--ink4);font-size:.78rem">No data</div>';
+
+  document.getElementById('act-log').innerHTML=activity.slice(0,7).map(a=>`
+    <div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--bg2);font-size:.76rem">
+      <div style="width:8px;height:8px;border-radius:50%;background:${safeActivityColor(a.col)};margin-top:4px;flex-shrink:0"></div>
+      <div style="color:var(--ink2);flex:1;line-height:1.4">${esc(a.text)}</div>
+      <div style="font-family:var(--font-number);font-size:.63rem;color:var(--ink4);white-space:nowrap">${esc(a.time)}</div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════════════════════════
+// TABLE
+// ════════════════════════════════════════════════════════════
+function populateProgFilter(){
+  const sel=document.getElementById('f-prog');
+  const cur=sel.value;
+  const programmes=[...new Set([...PROGRAMMES,...students.map(s=>s.programme).filter(Boolean)])].sort((a,b)=>a.localeCompare(b));
+  sel.innerHTML='<option value="">All Programmes</option>'+programmes.map(p=>`<option value="${esc(p)}"${p===cur?' selected':''}>${esc(p)}</option>`).join('');
+}
+function applyF(){
+  fCls=document.getElementById('f-cls').value;
+  fYr=document.getElementById('f-yr').value;
+  fProg=document.getElementById('f-prog').value;
+  let d=[...students];
+  if(fYr)d=d.filter(s=>String(s.year)===fYr);
+  if(fProg)d=d.filter(s=>s.programme===fProg);
+  if(fCls)d=d.filter(s=>classify(computeCGPA(s.semesters)).label===fCls);
+  d.sort((a,b)=>{
+    if(sortKey==='cgpa'){const ca=computeCGPA(a.semesters)||0,cb=computeCGPA(b.semesters)||0;return(ca-cb)*sortDir;}
+    let va=a[sortKey],vb=b[sortKey];
+    if(typeof va==='string')return va.localeCompare(vb)*sortDir;
+    return(va-vb)*sortDir;
+  });
+  displayed=d;pg=1;
+}
+function srt(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}applyF();renderT();}
+function renderT(){
+  updateSortHeaders();
+  const body=document.getElementById('t-body');
+  const empty=document.getElementById('t-empty');
+  const data=displayed.slice((pg-1)*perPage,pg*perPage);
+  if(!displayed.length){body.innerHTML='';empty.style.display='block';}
+  else{
+    empty.style.display='none';
+    body.innerHTML=data.map((s,i)=>{
+      const cg=computeCGPA(s.semesters);
+      const cl=classify(cg);
+      const pct=cg!==null?Math.min(100,(cg/5)*100):0;
+      const nSem=s.semesters.length;
+      return`<tr style="animation-delay:${i*.03}s;cursor:pointer" tabindex="0" role="button" aria-label="Open transcript for ${esc(s.name)}" onclick="openTranscript('${esc(s.reg)}')" onkeydown="rowKeydown(event,'${esc(s.reg)}')">
+        <td class="td-b">${esc(s.name)}</td>
+        <td class="td-mono">${esc(s.reg)}</td>
+        <td>${facultyTag(s.programme)}</td>
+        <td class="td-mono">Yr ${s.year}</td>
+        <td><div class="gpa-cell">
+          <div class="mini-bar"><div class="mini-fill" style="width:${pct}%;background:${gpaColor(cg)}"></div></div>
+          <span style="font-family:var(--font-number);font-weight:600;font-size:.78rem;color:${gpaColor(cg)}">${cg!==null?cg.toFixed(2):'—'}</span>
+        </div></td>
+        <td><span class="chip ${cl.chip}">${cl.label}</span></td>
+        <td class="td-mono" style="color:var(--ink4)">${nSem} sem${nSem!==1?'s':''}</td>
+        <td onclick="event.stopPropagation()"><div class="row-acts">
+          <button class="ra view" title="Transcript" aria-label="Open transcript" onclick="openTranscript('${esc(s.reg)}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="ra edit" title="Edit" aria-label="Edit student" onclick="openEdit('${esc(s.reg)}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="ra del" title="Delete" aria-label="Delete student" onclick="askDel('${esc(s.reg)}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+        </div></td>
+      </tr>`;
+    }).join('');
+  }
+  renderPg();
+}
+function renderPg(){
+  const tot=Math.ceil(displayed.length/perPage)||1;
+  const st=(pg-1)*perPage+1,en=Math.min(pg*perPage,displayed.length);
+  let btns='';
+  for(let i=1;i<=tot;i++){
+    if(tot>7&&i>2&&i<tot-1&&Math.abs(i-pg)>1){if(i===3||i===tot-2)btns+='<span style="padding:0 3px;color:var(--ink4)">…</span>';continue;}
+    btns+=`<button class="pg-b ${i===pg?'on':''}" onclick="goP(${i})">${i}</button>`;
+  }
+  document.getElementById('t-pg').innerHTML=`
+    <span class="pager-info">Showing ${displayed.length?st:0}–${en} of ${displayed.length}</span>
+    <div class="pg-btns">
+      <button class="pg-b" onclick="goP(${pg-1})" ${pg===1?'disabled':''}>‹</button>
+      ${btns}
+      <button class="pg-b" onclick="goP(${pg+1})" ${pg===tot?'disabled':''}>›</button>
+    </div>`;
+}
+function goP(p){const t=Math.ceil(displayed.length/perPage)||1;if(p<1||p>t)return;pg=p;renderT();}
+
+// ════════════════════════════════════════════════════════════
+// TRANSCRIPT
+// ════════════════════════════════════════════════════════════
+function openTranscript(reg){
+  const s=students.find(x=>x.reg===reg);if(!s)return;
+  nav('transcript');
+  renderTranscript(reg);
+}
+
+function renderTranscript(reg){
+  const s=students.find(x=>x.reg===reg);if(!s)return;
+  const cg=computeCGPA(s.semesters);
+  const cl=classify(cg);
+  const initials=s.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+  // Build running CGPA per semester for the banner progression
+  let runCr=0,runPts=0;
+  const semWithGPA=s.semesters.map(sm=>{
+    const g=semGPA(sm.courses);
+    sm.courses.forEach(c=>{runCr+=c.credits;runPts+=gradeFromMark(c.marks).gp*c.credits;});
+    return{...sm,sgpa:g,runCGPA:runCr>0?+(runPts/runCr).toFixed(2):null};
+  });
+
+  const totalCr=s.semesters.flatMap(s=>s.courses).reduce((a,c)=>a+c.credits,0);
+  const totalCU=s.semesters.reduce((a,sm)=>a+sm.courses.length,0);
+
+  document.getElementById('transcript-content').innerHTML=`
+    <!-- Sticky CGPA banner -->
+    <div class="cgpa-banner">
+      <div>
+        <div class="cgpa-label">Cumulative GPA</div>
+        <div class="cgpa-val">${cg!==null?cg.toFixed(2):'—'}</div>
+      </div>
+      <div class="cgpa-divider"></div>
+      <div class="cgpa-stat"><span class="sv">${cl.label}</span><span class="sl">Standing</span></div>
+      <div class="cgpa-divider"></div>
+      <div class="cgpa-stat"><span class="sv">${totalCr}</span><span class="sl">Credit Hrs</span></div>
+      <div class="cgpa-divider"></div>
+      <div class="cgpa-stat"><span class="sv">${totalCU}</span><span class="sl">Course Units</span></div>
+      <div class="cgpa-divider"></div>
+      <div class="cgpa-stat"><span class="sv">${s.semesters.length}</span><span class="sl">Semesters</span></div>
+      <div class="cgpa-actions">
+        <button class="btn btn-on-dark btn-sm" onclick="openEdit('${esc(reg)}')">Edit</button>
+        <button class="btn btn-on-dark btn-on-dark-primary btn-sm" onclick="openAddSem('${esc(reg)}')">+ Semester</button>
+        <button class="btn btn-on-dark btn-sm" onclick="nav('students')">← Back</button>
+      </div>
+    </div>
+
+    <div class="transcript-wrap">
+      <!-- Student header card -->
+      <div class="card" style="margin:20px 0 0;border-radius:var(--radius) var(--radius) 0 0;border-bottom:none">
+        <div style="background:var(--forest);padding:22px 24px;display:flex;align-items:center;gap:18px">
+          <div style="width:60px;height:60px;border-radius:50%;border:2px solid var(--amber);
+            display:flex;align-items:center;justify-content:center;
+            font-family:var(--font-heading);font-size:1.4rem;font-weight:600;
+            color:var(--amber);background:var(--forest2);flex-shrink:0">${initials}</div>
+          <div>
+            <div style="font-family:var(--font-heading);font-size:1.5rem;color:var(--white);font-weight:600">${esc(s.name)}</div>
+            <div style="font-family:var(--font-number);font-size:.74rem;color:var(--amber);margin-top:2px">${esc(s.reg)}</div>
+            <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+              <span class="chip ${cl.chip}">${cl.label}</span>
+              <span style="background:rgba(255,255,255,.11);color:rgba(255,255,255,.88);padding:3px 9px;border-radius:10px;font-size:.66rem;border:1px solid rgba(255,255,255,.14)">Year ${s.year}</span>
+              <span style="background:rgba(255,255,255,.10);color:#fff;padding:4px 10px;border-radius:999px;font-size:.66rem;border:1px solid rgba(255,255,255,.10)">${esc(s.programme)}</span>
+              <span style="background:rgba(255,255,255,.11);color:rgba(255,255,255,.88);padding:3px 9px;border-radius:10px;font-size:.66rem;border:1px solid rgba(255,255,255,.14)">${esc(s.email)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Semester list -->
+      <div class="card" style="border-radius:0 0 var(--radius) var(--radius);border-top:none;margin-bottom:20px">
+        <div class="semester-list">
+          ${semWithGPA.length===0?
+            `<div style="padding:28px 24px;text-align:center;color:var(--ink4);font-size:.82rem">
+              No semester data yet. <button class="btn btn-amber btn-sm" style="margin-left:8px" onclick="openAddSem('${esc(reg)}')">+ Add First Semester</button>
+            </div>`
+            :
+            semWithGPA.map((sm,idx)=>{
+              const isLast=idx===semWithGPA.length-1;
+              const sgpa=sm.sgpa;
+              const sgpaCol=gpaColor(sgpa);
+              const sgpaCl=classify(sgpa);
+              const runCGPA=sm.runCGPA;
+              return`
+              <div class="semester" style="padding:0 20px">
+                <!-- Spine -->
+                <div class="sem-spine">
+                  <div class="sem-node ${sm.courses.length>0?'has-data':''} ${isLast?'current':''}">
+                    <span style="font-size:.55rem;text-align:center;line-height:1.2">Y${sm.year}<br>S${sm.sem}</span>
+                  </div>
+                  ${!isLast?`<div class="sem-line done"></div>`:''}
+                </div>
+                <!-- Card -->
+                <div class="sem-card" style="margin-left:12px">
+                  <div class="sem-card-hd">
+                    <div class="sem-title">Year ${sm.year} — Semester ${sm.sem}</div>
+                    <div class="sem-meta">
+                      ${sgpa!==null?`
+                        <div style="text-align:center">
+                          <div style="font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;color:var(--ink4);font-family:var(--font-number)">Sem GPA</div>
+                          <div style="font-family:var(--font-number);font-size:.95rem;font-weight:600;color:${sgpaCol}">${sgpa.toFixed(2)}</div>
+                        </div>
+                        <div style="width:1px;height:28px;background:var(--stone)"></div>
+                        <div style="text-align:center">
+                          <div style="font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;color:var(--ink4);font-family:var(--font-number)">Running CGPA</div>
+                          <div style="font-family:var(--font-number);font-size:.95rem;font-weight:600;color:${gpaColor(runCGPA)}">${runCGPA!==null?runCGPA.toFixed(2):'—'}</div>
+                        </div>
+                        <span class="chip ${sgpaCl.chip}">${sgpaCl.label}</span>
+                      `:''}
+                      <span class="sem-units">${sm.courses.length} unit${sm.courses.length!==1?'s':''}</span>
+                      <button class="btn btn-amber btn-xs" onclick="openAddCU('${esc(reg)}',${idx})">+ Unit</button>
+                      <button class="btn btn-rust btn-xs" onclick="askDelSem('${esc(reg)}',${idx})">Remove</button>
+                    </div>
+                  </div>
+                  ${sm.courses.length===0?
+                    `<div class="sem-empty">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                      No course units added yet. Click "+ Unit" to add results.
+                    </div>`
+                    :`
+                    <table class="cu-table">
+                      <thead><tr>
+                        <th>Course Unit</th>
+                        <th>Code</th>
+                        <th style="text-align:center">Credits</th>
+                        <th style="text-align:center">Marks</th>
+                        <th style="text-align:center">Grade</th>
+                        <th style="text-align:center">Grade Pts</th>
+                        <th style="text-align:center">Wtd Pts</th>
+                        <th></th>
+                      </tr></thead>
+                      <tbody>
+                        ${sm.courses.map((cu,ci)=>{
+                          const gr=gradeFromMark(cu.marks);
+                          const wtd=+(gr.gp*cu.credits).toFixed(2);
+                          return`<tr>
+                            <td style="font-weight:500;max-width:220px;white-space:normal;line-height:1.3">${esc(cu.name)}</td>
+                            <td class="td-mono" style="font-size:.7rem">${esc(cu.code)}</td>
+                            <td class="td-mono" style="text-align:center">${cu.credits}</td>
+                            <td style="text-align:center"><span class="mark-val">${cu.marks}</span></td>
+                            <td style="text-align:center"><span class="gc ${gr.chip}">${gr.grade}</span></td>
+                            <td class="gp-val" style="text-align:center;color:${gpaColor(gr.gp)}">${gr.gp.toFixed(1)}</td>
+                            <td class="gp-val" style="text-align:center;color:${gpaColor(gr.gp)}">${wtd}</td>
+                            <td><button class="ra del" style="opacity:.5" onclick="askDelCU('${esc(reg)}',${idx},${ci})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></td>
+                          </tr>`;
+                        }).join('')}
+                      </tbody>
+                      <tfoot>
+                        <tr style="border-top:1.5px solid var(--stone);background:var(--bg2)">
+                          <td colspan="2" style="padding:8px 16px;font-weight:600;font-size:.75rem;color:var(--ink2)">Semester Totals</td>
+                          <td class="td-mono" style="text-align:center;font-weight:600">${sm.courses.reduce((a,c)=>a+c.credits,0)}</td>
+                          <td></td><td></td>
+                          <td style="text-align:center;font-family:var(--font-number);font-weight:700;color:${sgpaCol}">${sgpa!==null?sgpa.toFixed(2):'—'}</td>
+                          <td style="text-align:center;font-family:var(--font-number);font-weight:700;color:${sgpaCol}">${sm.courses.reduce((a,c)=>a+(gradeFromMark(c.marks).gp*c.credits),0).toFixed(2)}</td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
+                    </table>`
+                  }
+                </div>
+              </div>`;
+            }).join('')
+          }
+          ${semWithGPA.length>0?`
+            <!-- CGPA summary row -->
+            <div style="padding:16px 24px 16px 104px">
+              <div style="background:var(--forest);border-radius:var(--radius-sm);padding:14px 18px;
+                display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+                <div>
+                  <div style="font-size:.58rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.86);font-family:var(--font-number);margin-bottom:2px">Final CGPA</div>
+                  <div style="font-family:var(--font-number);font-size:1.4rem;font-weight:600;color:var(--amber)">${cg!==null?cg.toFixed(2):'—'}</div>
+                </div>
+                <div style="width:1px;height:36px;background:rgba(255,255,255,.12)"></div>
+                <div style="font-family:var(--font-heading);font-size:1.05rem;color:var(--white)">${cl.label}</div>
+                <div style="width:1px;height:36px;background:rgba(255,255,255,.12)"></div>
+                <div style="font-size:.78rem;color:rgba(255,255,255,.84)">Based on ${totalCr} credit hours across ${s.semesters.length} semester${s.semesters.length!==1?'s':''}</div>
+              </div>
+            </div>`:''}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════════════════════════
+// ADD SEMESTER
+// ════════════════════════════════════════════════════════════
+function openAddSem(reg){
+  semReg=reg;
+  const s=students.find(x=>x.reg===reg);
+  document.getElementById('sem-sub').textContent=s?s.name:'';
+  openOv('ov-sem');
+}
+function saveSem(){
+  const s=students.find(x=>x.reg===semReg);if(!s)return;
+  const yr=+document.getElementById('sem-yr').value;
+  const sm=+document.getElementById('sem-num').value;
+  if(s.semesters.find(x=>x.year===yr&&x.sem===sm)){toast('That semester already exists.','err');return;}
+  s.semesters.push({year:yr,sem:sm,courses:[]});
+  s.semesters.sort((a,b)=>a.year!==b.year?a.year-b.year:a.sem-b.sem);
+  logAct(`Added Y${yr}S${sm} for ${s.name}`,'var(--teal)');
+  updateSS();closeOv('ov-sem');renderTranscript(semReg);toast('Semester added.','ok');
+}
+
+// ════════════════════════════════════════════════════════════
+// ADD COURSE UNIT
+// ════════════════════════════════════════════════════════════
+function openAddCU(reg,semIdx){
+  cuReg=reg;cuSemIdx=semIdx;
+  const s=students.find(x=>x.reg===reg);
+  const sm=s.semesters[semIdx];
+  document.getElementById('cu-sub').textContent=`${s.name} — Year ${sm.year} Sem ${sm.sem}`;
+  document.getElementById('cu-name').value='';
+  document.getElementById('cu-code').value='';
+  document.getElementById('cu-marks').value='';
+  document.getElementById('cu-preview').textContent='';
+  openOv('ov-cu');
+}
+function markPreview(){
+  const m=+document.getElementById('cu-marks').value;
+  const el=document.getElementById('cu-preview');
+  if(isNaN(m)||m<0||m>100){el.textContent='';return;}
+  const gr=gradeFromMark(m);
+  el.innerHTML=`<span class="gc ${gr.chip}">${gr.grade}</span> <span style="color:${gpaColor(gr.gp)}"> ${gr.gp.toFixed(1)} pts</span>`;
+}
+function saveCU(){
+  const s=students.find(x=>x.reg===cuReg);if(!s)return;
+  const name=cleanText(document.getElementById('cu-name').value,120);
+  const code=cleanText(document.getElementById('cu-code').value,24).toUpperCase();
+  const cr=+document.getElementById('cu-cr').value;
+  const marks=+document.getElementById('cu-marks').value;
+  if(!name){toast('Course name required.','err');return;}
+  if(!code){toast('Course code required.','err');return;}
+  if(!/^[A-Z0-9][A-Z0-9._/-]{1,23}$/.test(code)){toast('Course code contains unsupported characters.','err');return;}
+  if(s.semesters[cuSemIdx].courses.some(c=>c.code.toUpperCase()===code)){toast('That course code already exists in this semester.','err');return;}
+  if(isNaN(marks)||marks<0||marks>100){toast('Marks must be 0–100.','err');return;}
+  if(s.semesters[cuSemIdx].courses.length>=7){toast('Maximum 7 units per semester.','err');return;}
+  s.semesters[cuSemIdx].courses.push({name,code,credits:cr,marks});
+  logAct(`Added "${name}" to ${s.name}  Y${s.semesters[cuSemIdx].year}S${s.semesters[cuSemIdx].sem}`,'var(--sage)');
+  updateSS();closeOv('ov-cu');renderTranscript(cuReg);toast('Course unit added.','ok');
+}
+function askDelCU(reg,semIdx,cuIdx){
+  const s=students.find(x=>x.reg===reg);if(!s)return;
+  const course=s.semesters?.[semIdx]?.courses?.[cuIdx];if(!course)return;
+  openConfirm('Remove Course Unit',course.code,`Remove ${course.name} from this semester?`,()=>{
+    s.semesters[semIdx].courses.splice(cuIdx,1);
+    logAct(`Removed "${course.name}" from ${s.name}`,'var(--rust)');
+    updateSS();closeOv('ov-confirm');renderTranscript(reg);toast('Course unit removed.','ok');
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// DELETE SEMESTER
+// ════════════════════════════════════════════════════════════
+function askDelSem(reg,idx){
+  const s=students.find(x=>x.reg===reg);if(!s)return;
+  const sm=s.semesters[idx];
+  openConfirm('Remove Semester',`Year ${sm.year} Semester ${sm.sem}`,
+    `Remove Year ${sm.year} Semester ${sm.sem} and all ${sm.courses.length} course unit(s)?`,
+    ()=>{s.semesters.splice(idx,1);updateSS();closeOv('ov-confirm');renderTranscript(reg);toast('Semester removed.','ok');});
+}
+
+// ════════════════════════════════════════════════════════════
+// ENROL
+// ════════════════════════════════════════════════════════════
+let enN=1;
+function adjN(d){enN=Math.max(1,Math.min(10,enN+d));document.getElementById('n-disp').textContent=enN;renderEnBlocks();}
+function renderEnBlocks(){
+  const w=document.getElementById('en-blocks');w.innerHTML='';
+  for(let i=0;i<enN;i++){
+    const d=document.createElement('div');d.className='eblock';
+    d.innerHTML=`<div class="elbl">Student ${i+1}</div>
+      <div class="frow c2">
+        <div class="field"><label class="lbl req">Full Name</label><input type="text" id="en-n-${i}" maxlength="100" autocomplete="name" placeholder="Full name"></div>
+        <div class="field"><label class="lbl req">Reg Number</label><input type="text" id="en-r-${i}" maxlength="64" autocapitalize="characters" placeholder="24/U/APD/001/PD"></div>
+      </div>
+      <div class="frow c3">
+        <div class="field"><label class="lbl">Programme</label>
+          <select class="inp" id="en-p-${i}">${PROGRAMMES.map(p=>`<option>${p}</option>`).join('')}</select>
+        </div>
+        <div class="field"><label class="lbl">Year</label>
+          <select class="inp" id="en-y-${i}"><option>1</option><option>2</option><option>3</option><option value="4" selected>4</option></select>
+        </div>
+        <div class="field"><label class="lbl">Email</label><input type="email" id="en-e-${i}" maxlength="120" autocomplete="email" placeholder="student@kyu.ac.ug"></div>
+      </div>`;
+    w.appendChild(d);
+  }
+}
+function submitEnrol(){
+  const added=[];
+  for(let i=0;i<enN;i++){
+    const name=(document.getElementById(`en-n-${i}`).value||'').trim();
+    const reg=(document.getElementById(`en-r-${i}`).value||'').trim().toUpperCase();
+    const prog=document.getElementById(`en-p-${i}`).value;
+    const yr=+document.getElementById(`en-y-${i}`).value;
+    const email=(document.getElementById(`en-e-${i}`).value||'').trim();
+    if(!name){toast(`Student ${i+1}: name required.`,'err');return;}
+    if(!reg){toast(`Student ${i+1}: reg number required.`,'err');return;}
+    if(!validReg(reg)){toast(`Student ${i+1}: use only letters, numbers, /, _ or - in the registration number.`,'err');return;}
+    if(!validEmail(email)){toast(`Student ${i+1}: enter a valid email address.`,'err');return;}
+    if(students.some(s=>regKey(s.reg)===regKey(reg))||added.some(s=>regKey(s.reg)===regKey(reg))){toast(`Reg ${reg} already exists.`,'err');return;}
+    added.push({id:makeId(),name:cleanText(name,100),reg,programme:prog,year:clampYear(yr),email:cleanText(email,120),enrolledDate:new Date().toISOString().slice(0,10),semesters:[]});
+  }
+  students.push(...added);
+  logAct(`Enrolled ${added.length} student${added.length>1?'s':''}: ${added.map(s=>s.name).join(', ')}`,'var(--sage)');
+  updateSS();populateProgFilter();applyF();toast(`${added.length} student${added.length>1?'s':''} enrolled.`,'ok');
+  nav('students');
+}
+function resetEnrol(){enN=1;document.getElementById('n-disp').textContent=1;renderEnBlocks();}
+
+// ════════════════════════════════════════════════════════════
+// SEARCH
+// ════════════════════════════════════════════════════════════
+function liveS(q){
+  const wrap=document.getElementById('s-results');
+  if(!q.trim()){wrap.innerHTML='';return;}
+  const r=students.filter(s=>s.name.toLowerCase().includes(q.toLowerCase())||s.reg.toLowerCase().includes(q.toLowerCase()));
+  if(!r.length){wrap.innerHTML=`<div style="color:var(--ink4);font-size:.82rem;padding:12px 0">No students match "${esc(q)}".</div>`;return;}
+  wrap.innerHTML=`<div class="card"><div style="overflow-x:auto"><table>
+    <thead><tr><th>Name</th><th>Reg Number</th><th>Programme</th><th>Year</th><th>CGPA</th><th>Classification</th><th></th></tr></thead>
+    <tbody>${r.map(s=>{
+      const cg=computeCGPA(s.semesters);const cl=classify(cg);
+      return`<tr tabindex="0" role="button" aria-label="Open transcript for ${esc(s.name)}" onclick="openTranscript('${esc(s.reg)}')" onkeydown="rowKeydown(event,'${esc(s.reg)}')"><td class="td-b">${esc(s.name)}</td><td class="td-mono">${esc(s.reg)}</td><td>${facultyTag(s.programme)}</td><td class="td-mono">Yr ${s.year}</td><td style="font-family:var(--font-number);font-weight:600;color:${gpaColor(cg)}">${cg!==null?cg.toFixed(2):'—'}</td><td><span class="chip ${cl.chip}">${cl.label}</span></td><td><button class="ra view" aria-label="Open transcript" onclick="event.stopPropagation();openTranscript('${esc(s.reg)}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></td></tr>`;
+    }).join('')}</tbody>
+  </table></div></div>`;
+}
+function gSearch(q){const value=q.trim();if(!value){document.getElementById('s-q').value='';document.getElementById('s-results').innerHTML='';return;}if(!document.getElementById('panel-search').classList.contains('active'))nav('search');document.getElementById('s-q').value=q;liveS(q);}
+
+// ════════════════════════════════════════════════════════════
+// REPORTS
+// ════════════════════════════════════════════════════════════
+function renderReports(){
+  const progMap={};students.forEach(s=>{
+    const cg=computeCGPA(s.semesters);
+    if(!progMap[s.programme])progMap[s.programme]={n:0,cgpaN:0,sum:0,sems:0};
+    progMap[s.programme].n++;if(cg!==null){progMap[s.programme].sum+=cg;progMap[s.programme].cgpaN++;}
+    progMap[s.programme].sems+=s.semesters.length;
+  });
+  document.getElementById('rpt-prog').innerHTML=`
+    <div class="card-hd"><span class="card-hd-title">By Programme</span></div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Programme</th><th style="text-align:center">Students</th><th style="text-align:center">Avg CGPA</th><th style="text-align:center">Semesters</th></tr></thead>
+      <tbody>${Object.entries(progMap).map(([p,d])=>`<tr><td>${facultyTag(p)}</td><td class="td-mono" style="text-align:center">${d.n}</td><td style="text-align:center;font-family:var(--font-number);font-weight:600;color:${gpaColor(d.cgpaN?d.sum/d.cgpaN:null)}">${d.cgpaN?+(d.sum/d.cgpaN).toFixed(2):'—'}</td><td class="td-mono" style="text-align:center">${d.sems}</td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:var(--ink4);padding:20px">No data</td></tr>'}</tbody>
+    </table></div>`;
+
+  const yrMap={};students.forEach(s=>{
+    const cg=computeCGPA(s.semesters);
+    if(!yrMap[s.year])yrMap[s.year]={n:0,cgpaN:0,sum:0};
+    yrMap[s.year].n++;if(cg!==null){yrMap[s.year].sum+=cg;yrMap[s.year].cgpaN++;}
+  });
+  document.getElementById('rpt-yr').innerHTML=`
+    <div class="card-hd"><span class="card-hd-title">By Academic Year</span></div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Year</th><th style="text-align:center">Students</th><th style="text-align:center">Avg CGPA</th></tr></thead>
+      <tbody>${Object.entries(yrMap).sort((a,b)=>+a[0]-+b[0]).map(([y,d])=>`<tr><td class="td-mono">Year ${y}</td><td class="td-mono" style="text-align:center">${d.n}</td><td style="text-align:center;font-family:var(--font-number);font-weight:600;color:${gpaColor(d.cgpaN?d.sum/d.cgpaN:null)}">${d.cgpaN?+(d.sum/d.cgpaN).toFixed(2):'—'}</td></tr>`).join('')}</tbody>
+    </table></div>`;
+
+  const sorted=[...students].sort((a,b)=>{const ca=computeCGPA(a.semesters)||0,cb=computeCGPA(b.semesters)||0;return cb-ca;});
+  document.getElementById('rpt-full').innerHTML=`
+    <div class="card-hd"><span class="card-hd-title">Full Academic Standing</span><button class="btn btn-ghost btn-sm" onclick="exportCSV()">Export CSV</button></div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>#</th><th>Name</th><th>Reg Number</th><th>Programme</th><th>Year</th><th>Semesters</th><th>CGPA</th><th>Classification</th></tr></thead>
+      <tbody>${sorted.map((s,i)=>{const cg=computeCGPA(s.semesters);const cl=classify(cg);return`<tr tabindex="0" role="button" aria-label="Open transcript for ${esc(s.name)}" onclick="openTranscript('${esc(s.reg)}')" onkeydown="rowKeydown(event,'${esc(s.reg)}')"><td class="td-mono" style="color:var(--ink4)">${i+1}</td><td class="td-b">${esc(s.name)}</td><td class="td-mono">${esc(s.reg)}</td><td>${facultyTag(s.programme)}</td><td class="td-mono">Yr ${s.year}</td><td class="td-mono" style="color:var(--ink4)">${s.semesters.length}</td><td style="font-family:var(--font-number);font-weight:600;color:${gpaColor(cg)}">${cg!==null?cg.toFixed(2):'—'}</td><td><span class="chip ${cl.chip}">${cl.label}</span></td></tr>`;}).join('')}</tbody>
+    </table></div>`;
+}
+
+// ════════════════════════════════════════════════════════════
+// EDIT
+// ════════════════════════════════════════════════════════════
+function openEdit(reg){
+  editReg=reg;const s=students.find(x=>x.reg===reg);if(!s)return;
+  const sel=document.getElementById('e-prog');
+  const options=[...new Set([...PROGRAMMES,...students.map(x=>x.programme).filter(Boolean)])].sort((a,b)=>a.localeCompare(b));
+  sel.innerHTML=options.map(p=>`<option value="${esc(p)}"${p===s.programme?' selected':''}>${esc(p)}</option>`).join('');
+  document.getElementById('edit-sub').textContent=s.reg;
+  document.getElementById('e-name').value=s.name;
+  document.getElementById('e-reg').value=s.reg;
+  document.getElementById('e-yr').value=s.year;
+  document.getElementById('e-email').value=s.email||'';
+  openOv('ov-edit');
+}
+function saveEdit(){
+  const s=students.find(x=>x.reg===editReg);if(!s)return;
+  const name=(document.getElementById('e-name').value||'').trim();
+  if(!name){toast('Name required.','err');return;}
+  const email=document.getElementById('e-email').value.trim();
+  if(!validEmail(email)){toast('Enter a valid email address.','err');return;}
+  s.name=cleanText(name,100);s.programme=document.getElementById('e-prog').value;
+  s.year=clampYear(document.getElementById('e-yr').value);s.email=cleanText(email,120);
+  logAct(`Updated record: ${name}`,'var(--steel)');
+  updateSS();applyF();toast('Record updated.','ok');closeOv('ov-edit');
+  if(document.getElementById('panel-transcript').classList.contains('active'))renderTranscript(editReg);
+  if(document.getElementById('panel-students').classList.contains('active'))renderT();
+}
+
+// ════════════════════════════════════════════════════════════
+// DELETE STUDENT
+// ════════════════════════════════════════════════════════════
+function askDel(reg){
+  const s=students.find(x=>x.reg===reg);if(!s)return;
+  openConfirm('Delete Student','This cannot be undone.',`Remove ${s.name} (${s.reg}) and all their academic records?`,
+    ()=>{students=students.filter(x=>x.reg!==reg);logAct(`Deleted: ${s.name}`,'var(--rust)');
+    updateSS();applyF();renderT();toast('Student deleted.','ok');closeOv('ov-confirm');
+    if(document.getElementById('panel-transcript').classList.contains('active'))nav('students');});
+}
+
+// ════════════════════════════════════════════════════════════
+// CLEAR ALL
+// ════════════════════════════════════════════════════════════
+function askClear(){
+  openConfirm('Clear All Data','All records will be permanently removed.',`Delete all ${students.length} student records?`,
+    ()=>{students=[];updateSS();applyF();toast('All data cleared.','ok');closeOv('ov-confirm');nav('dashboard');});
+}
+
+// ════════════════════════════════════════════════════════════
+// CSV
+// ════════════════════════════════════════════════════════════
+function csvCell(value){
+  let text=String(value??'');
+  if(/^[=+\-@]/.test(text))text=`'${text}`;
+  return `"${text.replace(/"/g,'""')}"`;
+}
+function exportCSV(){
+  const headers=['Name','Reg Number','Programme','Year','Email','CGPA','Classification','Semesters'];
+  const rows=students.map(s=>{const cg=computeCGPA(s.semesters);return[
+    s.name,s.reg,s.programme,s.year,s.email,cg!==null?cg.toFixed(2):'',classify(cg).label,s.semesters.length
+  ].map(csvCell).join(',');});
+  const blob=new Blob(['\uFEFF'+headers.map(csvCell).join(',')+'\r\n'+rows.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='kyambogo_students.csv';document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),0);toast('CSV exported.','ok');
+}
+function parseCSV(text){
+  const rows=[];let row=[],field='',quoted=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i],next=text[i+1];
+    if(quoted){if(ch==='"'&&next==='"'){field+='"';i++;}else if(ch==='"'){quoted=false;}else{field+=ch;}}
+    else if(ch==='"'){quoted=true;}
+    else if(ch===','){row.push(field);field='';}
+    else if(ch==='\n'){row.push(field.replace(/\r$/,''));rows.push(row);row=[];field='';}
+    else{field+=ch;}
+  }
+  if(field.length||row.length){row.push(field.replace(/\r$/,''));rows.push(row);}
+  if(quoted)throw new Error('The CSV contains an unclosed quoted field.');
+  return rows.filter(r=>r.some(cell=>cell.trim()));
+}
+function headerIndex(headers,...aliases){
+  const normal=headers.map(h=>h.trim().toLowerCase().replace(/[^a-z0-9]/g,''));
+  return normal.findIndex(h=>aliases.includes(h));
+}
+function importCSV(event){
+  const file=event.target.files?.[0];if(!file)return;
+  if(file.size>MAX_IMPORT_BYTES){toast('CSV is too large. Maximum size is 2 MB.','err');event.target.value='';return;}
+  const reader=new FileReader();
+  reader.onerror=()=>{toast('The CSV file could not be read.','err');event.target.value='';};
+  reader.onload=ev=>{
+    try{
+      const rows=parseCSV(String(ev.target.result||'').replace(/^\uFEFF/,''));
+      if(rows.length<2)throw new Error('The CSV has no student rows.');
+      const headers=rows[0];
+      const iName=headerIndex(headers,'name','fullname','studentname');
+      const iReg=headerIndex(headers,'regnumber','registrationnumber','regno','studentnumber');
+      const iProgramme=headerIndex(headers,'programme','program','course');
+      const iYear=headerIndex(headers,'year','academicyear');
+      const iEmail=headerIndex(headers,'email','emailaddress');
+      if(iName<0||iReg<0)throw new Error('Required headers are Name and Reg Number.');
+      let added=0,skipped=0,invalid=0;const pending=[];const known=new Set(students.map(s=>regKey(s.reg)));
+      rows.slice(1).forEach(cells=>{
+        const name=cleanText(cells[iName],100),reg=cleanText(cells[iReg],64).toUpperCase();
+        const programme=iProgramme>=0?cleanText(cells[iProgramme],100):PROGRAMMES[0];
+        const year=iYear>=0?clampYear(cells[iYear]):1;
+        const email=iEmail>=0?cleanText(cells[iEmail],120):'';
+        const key=regKey(reg);
+        if(!name||!validReg(reg)||!validEmail(email)){invalid++;return;}
+        if(known.has(key)){skipped++;return;}
+        known.add(key);pending.push({id:makeId(),name,reg,programme:programme||PROGRAMMES[0],year,email,enrolledDate:new Date().toISOString().slice(0,10),semesters:[]});added++;
+      });
+      students.push(...pending);logAct(`Imported ${added} students from CSV`,'var(--teal)');updateSS();populateProgFilter();applyF();
+      if(document.getElementById('panel-students').classList.contains('active'))renderT();
+      toast(`Imported ${added}; skipped ${skipped} duplicates; rejected ${invalid} invalid rows.`,invalid?'info':'ok');
+    }catch(error){toast(error.message||'CSV import failed.','err');}
+    finally{event.target.value='';}
+  };
+  reader.readAsText(file);
+}
+
+// ════════════════════════════════════════════════════════════
+// OVERLAYS / CONFIRM / TOAST
+// ════════════════════════════════════════════════════════════
+function openOv(id){
+  const overlay=document.getElementById(id);if(!overlay)return;lastFocusedElement=document.activeElement;overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');
+  requestAnimationFrame(()=>overlay.querySelector('input:not([disabled]),select:not([disabled]),button:not([disabled]),[tabindex="0"]')?.focus());
+}
+function closeOv(id){const overlay=document.getElementById(id);if(!overlay)return;overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');lastFocusedElement?.focus?.();}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeOv(o.id);}));
+document.addEventListener('keydown',event=>{if(event.key==='Escape'){const open=document.querySelector('.overlay.open');if(open)closeOv(open.id);else closeSidebar();}});
+
+function openConfirm(title,sub,msg,cb){
+  document.getElementById('cf-title').textContent=title;
+  document.getElementById('cf-sub').textContent=sub;
+  document.getElementById('cf-msg').textContent=msg;
+  document.getElementById('cf-ok').onclick=cb;
+  openOv('ov-confirm');
+}
+
+function toast(msg,type='ok'){
+  const icons={ok:'✓',err:'✕',info:'i'};
+  const el=document.createElement('div');
+  el.className=`toast ${type}`;
+  const icon=document.createElement('span');icon.style.fontWeight='700';icon.textContent=icons[type]||'·';el.append(icon,document.createTextNode(` ${String(msg)}`));
+  document.getElementById('t-stack').appendChild(el);
+  setTimeout(()=>el.remove(),3400);
+}
+
+function logAct(text,col='var(--amber)'){
+  const t=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  activity.unshift({text:cleanText(text,180),time:t,col:safeActivityColor(col)});
+  if(activity.length>20)activity.pop();
+  persistState();
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ════════════════════════════════════════════════════════════
+// SMART PRINT
+// ════════════════════════════════════════════════════════════
+function smartPrint(){
+  const activePanel=document.querySelector('.panel.active');
+  if(!activePanel){window.print();return;}
+
+  const oldFrame=document.getElementById('print-frame');
+  if(oldFrame)oldFrame.remove();
+
+  const frame=document.createElement('iframe');
+  frame.id='print-frame';
+  frame.title='Printable view';
+  frame.setAttribute('aria-hidden','true');
+  frame.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none';
+  document.body.appendChild(frame);
+
+  const printWindow=frame.contentWindow;
+  const printDocument=printWindow.document;
+  const pageTitle=(document.getElementById('tb-title')?.textContent||'Student Records').trim();
+  const clonedPanel=activePanel.cloneNode(true);
+
+  clonedPanel.querySelectorAll(
+    'button,.row-acts,.ra,.tbl-ctrl,.pg-row,.add-course-form,.cgpa-actions,.t-stack,.overlay,input,select'
+  ).forEach(el=>el.remove());
+
+  clonedPanel.querySelectorAll('[tabindex],[onclick],[onkeydown]').forEach(el=>{
+    el.removeAttribute('tabindex');
+    el.removeAttribute('onclick');
+    el.removeAttribute('onkeydown');
+    el.removeAttribute('role');
+  });
+
+  const sourceStyles=Array.from(document.querySelectorAll('style'))
+    .map(style=>style.textContent)
+    .join('\n');
+
+  const printOverrides=`
+    :root{color-scheme:light}
+    *,*::before,*::after{animation:none!important;transition:none!important;box-shadow:none!important}
+    html,body{height:auto!important;min-height:0!important;overflow:visible!important;background:#fff!important}
+    body{margin:0!important;padding:0!important;font-family:Arial,Helvetica,sans-serif!important;color:#1F2937!important}
+    .content{padding:0!important;background:#fff!important}
+    .panel{display:block!important}
+    .ph{display:block!important;margin:0 0 16px!important}
+    .ph-eye{color:#5B6674!important}
+    .ph-h,.card-hd-title,.sem-title,.fc-hd h2{font-family:Arial,Helvetica,sans-serif!important}
+    .card,.sem-card,.fc{break-inside:auto!important;border:1px solid #CBD2DA!important;background:#fff!important}
+    .kpi{break-inside:avoid!important;border:1px solid #CBD2DA!important;background:#fff!important}
+    .dash-row,.dash-row.eq{grid-template-columns:1fr!important;gap:12px!important}
+    .kpi-row{grid-template-columns:repeat(3,1fr)!important;gap:10px!important}
+    .cgpa-banner{position:static!important;top:auto!important;background:#123B5D!important;color:#fff!important;border-bottom:3px solid #B8943A!important}
+    .transcript-wrap{max-width:none!important;margin:0!important}
+    .semester-list{padding:12px 0!important}
+    .semester{break-inside:auto!important}
+    .sem-spine{display:none!important}
+    .sem-card{margin:0 0 14px!important;width:100%!important}
+    table{width:100%!important;border-collapse:collapse!important;font-size:9.5pt!important}
+    thead{display:table-header-group!important}
+    tfoot{display:table-footer-group!important}
+    tr{break-inside:avoid!important;page-break-inside:avoid!important}
+    th,td{white-space:normal!important;padding:6px 8px!important}
+    .chip,.gc{print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important}
+    svg{max-width:100%!important}
+    @page{size:A4;margin:12mm}
+    @media(max-width:700px){.kpi-row{grid-template-columns:1fr 1fr!important}}
+  `;
+
+  printDocument.open();
+  printDocument.write(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${esc(pageTitle)}</title><style>${sourceStyles}\n${printOverrides}</style></head><body><main class="content">${clonedPanel.outerHTML}</main></body></html>`);
+  printDocument.close();
+
+  let cleaned=false;
+  const cleanup=()=>{
+    if(cleaned)return;
+    cleaned=true;
+    setTimeout(()=>frame.remove(),250);
+  };
+
+  printWindow.onafterprint=cleanup;
+  const launchPrint=()=>{
+    printWindow.focus();
+    printWindow.print();
+    setTimeout(cleanup,30000);
+  };
+
+  if(printDocument.readyState==='complete'){
+    requestAnimationFrame(()=>requestAnimationFrame(launchPrint));
+  }else{
+    frame.onload=()=>requestAnimationFrame(()=>requestAnimationFrame(launchPrint));
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════
+populateProgFilter();
+updateSS();
+renderDash();
+applyF();
+renderEnBlocks();
+updateSortHeaders();
+window.addEventListener('resize',()=>{if(window.innerWidth>860)closeSidebar();});
+</script>
+</body>
+</html>
