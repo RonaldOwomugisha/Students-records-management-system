@@ -26,8 +26,6 @@ The project demonstrates how programming concepts can be applied to develop a pr
 
 **Student:** Ronald Owomugisha
 
-**Registration Number:** 24/U/APD/11369/PD
-
 ## Main Features
 
 * Student registration and record management
