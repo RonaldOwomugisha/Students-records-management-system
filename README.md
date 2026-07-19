@@ -1,116 +1,129 @@
-# Student Academic Records System
+# Student Academic Records Management System
 
-A responsive, browser-based academic records management interface developed as a course assignment for **Programming for Mechanical Engineers**. The project was prepared by a student pursuing a **Bachelor of Engineering in Automotive and Power Engineering** under the **Department of Mechanical and Production Engineering, Kyambogo University**. The application manages student profiles, semester results, GPA and CGPA calculations, academic classifications, reports, transcripts, CSV import and CSV export.
+A responsive web-based application for managing student academic records, calculating GPA and CGPA, generating transcripts, analysing academic performance, and importing or exporting student data.
 
-## Academic context
+## Live Demo
 
-- **Course unit:** Programming for Mechanical Engineers
-- **Programme:** Bachelor of Engineering in Automotive and Power Engineering
-- **Department:** Mechanical and Production Engineering
-- **Institution:** Kyambogo University
-- **Academic year:** 2025/2026
-- **Student registration number:** 24/U/APD/11369/PD
+[Open the Student Academic Records Management System](YOUR-GITHUB-PAGES-LINK)
 
-This repository represents a course assignment and frontend demonstration. It is not an official Kyambogo University information system.
+## Project Overview
 
-## Repository contents
+The Student Academic Records Management System was developed as an academic assignment for the **Programming for Mechanical Engineers** course unit.
 
-- `index.html` — complete frontend application
-- `sample_students.csv` — sample import file
-- `CODE_REVIEW.md` — review findings, corrections, and remaining production requirements
-- `.nojekyll` — tells GitHub Pages to serve the repository as a plain static site
+The project demonstrates how programming concepts can be applied to develop a practical system for managing student information and academic results. It provides a clean and responsive interface for registering students, recording semester results, calculating academic performance, generating transcripts, and producing summary reports.
 
-## Run locally
+## Academic Context
 
-Open `index.html` in a modern browser. For behavior closest to GitHub Pages, use a small local web server rather than opening the file directly.
+**Institution:** Kyambogo University
 
-```bash
-python -m http.server 8000
+**Department:** Mechanical and Production Engineering
+
+**Programme:** Bachelor of Engineering in Automotive and Power Engineering
+
+**Course Unit:** Programming for Mechanical Engineers
+
+**Academic Year:** 2025/2026
+
+**Student:** Ronald Owomugisha
+
+**Registration Number:** 24/U/APD/11369/PD
+
+## Main Features
+
+* Student registration and record management
+* Student searching, filtering, and sorting
+* Semester and course unit management
+* Automatic grade and grade-point calculation
+* Semester GPA calculation
+* Cumulative GPA calculation
+* Academic classification
+* Student transcript generation
+* Academic performance dashboard
+* Programme and year-level reports
+* CSV data import and export
+* Printing of dashboards, reports, registers, and transcripts
+* Browser-based data persistence
+* Responsive layout for computers, tablets, and mobile phones
+
+## Academic Grading System
+
+| Mark Range | Grade | Grade Point |
+| ---------- | ----: | ----------: |
+| 80–100     |     A |         5.0 |
+| 75–79      |    B+ |         4.5 |
+| 70–74      |     B |         4.0 |
+| 65–69      |    C+ |         3.5 |
+| 60–64      |     C |         3.0 |
+| 55–59      |    D+ |         2.5 |
+| 50–54      |     D |         2.0 |
+| Below 50   |     F |         0.0 |
+
+The system calculates GPA and CGPA using the credit-weighted grade points of the recorded course units.
+
+## Technologies Used
+
+* HTML5
+* CSS3
+* JavaScript
+* Browser Local Storage
+* CSV file handling
+* GitHub Pages
+
+The application is implemented as a self-contained frontend project and does not require external frameworks or a build process.
+
+## Running the Project Locally
+
+1. Download or clone this repository.
+2. Open the project folder.
+3. Open `index.html` in a modern web browser.
+
+No software installation, server, or database configuration is required.
+
+## CSV Import Format
+
+Student information can be imported using a CSV file with the following column structure:
+
+```csv
+Name,Reg Number,Programme,Year,Email,CGPA,Classification,Semesters
 ```
 
-Then open `http://localhost:8000`.
+A sample CSV file is included in the repository.
 
-## Publish with GitHub Pages
+## Data Storage
 
-### Easiest method: GitHub website
+Student records and changes are stored locally in the browser using Local Storage.
 
-1. Download and extract `student-records-github-ready.zip` on your computer.
-2. Sign in to GitHub and select **New repository**.
-3. Give the repository a clear name such as `student-records-system`.
-4. Select **Public** when using GitHub Free. Do not initialize the repository with another README because this package already contains one.
-5. Select **Create repository**.
-6. On the empty repository page, select **uploading an existing file**, or use **Add file → Upload files**.
-7. Open the extracted `student-records-github` folder and upload its contents. `index.html` must be in the repository root, not inside another nested folder. Do not upload only the ZIP archive.
-8. Confirm that the repository root contains `index.html`, `README.md`, `CODE_REVIEW.md`, `sample_students.csv`, and `.nojekyll`.
-9. Enter a commit message such as `Initial Student Records System release`, then select **Commit changes**.
-10. Open **Settings → Pages**.
-11. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
-12. Select the `main` branch and `/ (root)`, then select **Save**.
-13. Return to **Settings → Pages** after deployment. GitHub displays the published site address there.
+This means:
 
-For a normal project repository, the address is usually:
+* Records remain available after refreshing the page.
+* Information is stored only in the browser and device being used.
+* Records are not automatically shared between users or devices.
+* Clearing browser data may remove saved records.
+
+## Printing
+
+The system supports printing of the active dashboard, student register, reports, and academic transcripts using a simplified print layout.
+
+## Project Structure
 
 ```text
-https://YOUR-USERNAME.github.io/student-records-system/
+student-records-system/
+├── index.html
+├── README.md
+├── CODE_REVIEW.md
+├── sample_students.csv
+└── .nojekyll
 ```
 
-A first deployment or a later update can take several minutes to appear. When updating the website, upload the revised files to the same repository and commit them to `main`; GitHub Pages will publish the new version automatically.
+## Project Scope
 
-### Common deployment checks
+This application was developed as an academic frontend project and demonstration system.
 
-- The entry filename must be exactly `index.html`, using lowercase letters.
-- `index.html` must be at the top level of the selected publishing folder.
-- Use `main` and `/ (root)` for this package.
-- Do not upload confidential or real student records to the public repository.
-- If the site shows an older version, use a hard refresh with `Ctrl + F5`.
+It should not be used for official or confidential university records without a secure backend, authentication system, central database, user permissions, backups, and institutional data-protection controls.
 
-## Printing performance
+## Author
 
-The Print command creates a lightweight temporary print document containing only the currently active dashboard, report, register, or transcript view. Interactive controls, hidden panels, animations, web fonts, and navigation elements are excluded. This substantially reduces the time required for the browser to prepare print preview, especially for transcripts. Very long transcripts can still take longer because the browser must paginate every course table and page.
-
-## Browser data behavior
-
-Student records and activity history are stored in the current browser using `localStorage`.
-
-- Changes survive page refreshes on the same browser and device.
-- Data is not synchronized between browsers or devices.
-- Clearing browser site data removes the records.
-- To restore the initial sample dataset after using **Clear All**, run the command below in the browser console and reload:
-
-```javascript
-localStorage.removeItem('kyu-srms-state-v2');
-location.reload();
-```
-
-## CSV import format
-
-The importer requires these headings:
-
-- `Name`
-- `Reg Number`
-
-These headings are optional:
-
-- `Programme`
-- `Year`
-- `Email`
-
-Quoted values and commas inside quoted values are supported. Invalid registration numbers, invalid email addresses, duplicate records, and files larger than 2 MB are rejected or skipped.
-
-## Important production limitation
-
-GitHub Pages hosts static frontend files only. This version is suitable for demonstrations, assessment, interface review, and controlled local use. It is not a secure multi-user university ERP.
-
-A real production deployment handling official student records still requires:
-
-- authenticated user accounts
-- role-based permissions
-- a secure backend API
-- a managed database
-- server-side validation
-- encrypted transport and protected secrets
-- audit logs that users cannot alter
-- backups and recovery procedures
-- privacy, records-retention, and institutional compliance controls
-
-Do not place real confidential student records in a public GitHub repository or rely on browser storage as the official system of record.
+**Ronald Owomugisha**
+Bachelor of Engineering in Automotive and Power Engineering
+Department of Mechanical and Production Engineering
+Kyambogo University
