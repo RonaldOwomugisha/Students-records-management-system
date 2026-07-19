@@ -4,7 +4,7 @@ A responsive web-based application for managing student academic records, calcul
 
 ## Live Demo
 
-[Open the Student Academic Records Management System](YOUR-GITHUB-PAGES-LINK)
+https://ronaldowomugisha.github.io/Students-records-management-system/
 
 ## Project Overview
 
